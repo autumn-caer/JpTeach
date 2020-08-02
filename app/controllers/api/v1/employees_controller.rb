@@ -1,5 +1,6 @@
 class Api::V1::EmployeesController < ApiController
   before_action :set_employee, only: [:show]
+  before_action :authenticate_api_user! # この行を追加！
 
   # ActiveRecordのレコードが見つからなければ404 not foundを応答する
   rescue_from ActiveRecord::RecordNotFound do |exception|
