@@ -1,7 +1,9 @@
 <template>
-  <div>
+   <div>
     <v-app-bar
       color="green accent-4"
+      height="60px"
+      class ="py-0"
       dense
       dark
     >
@@ -42,7 +44,7 @@
         </v-list>
       </v-menu>
     </v-app-bar>
-  </div>
+    </div>
 </template>
 <script>
 export default {

@@ -1,48 +1,25 @@
 <template>
-  <v-card
-      class="mx-auto"
-      height="400"
-      width="256"
-    >
-      <v-navigation-drawer
-        class="deep-purple accent-4"
-        dark
-        permanent
-      >
-        <v-list>
-          <v-list-item
-            v-for="item in items"
-            :key="item.title"
-            link
-          >
-            <v-list-item-icon>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-icon>
-  
-            <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-  
-        <template v-slot:append>
-          <div class="pa-2">
-            <v-btn block>Logout</v-btn>
-          </div>
-        </template>
-      </v-navigation-drawer>
-    </v-card>
+      <div>
+        <v-row min-height="700">
+          <navBar></navBar>
+          <v-col md="10" class ="pa-md-0">
+            <v-card 
+            　min-height="700">
+              <v-card-title class="headline">JpTech Sign Up</v-card-title>
+            </v-card>
+          </v-col>
+          </v-row>
+      </div>
 </template>
 <script>
+  import NavBar from '../shared/navbar.vue';
   export default {
     data() {
       return {
-        items: [
-            { title: 'Dashboard', icon: 'dashboard' },
-            { title: 'Account', icon: 'account_box' },
-            { title: 'Admin', icon: 'gavel' },
-        ],
-    }
+      }
     },
+    components: {
+      navBar: NavBar
+    }
   }
 </script>
