@@ -114,6 +114,11 @@
                                  this.$store.commit('setUserName',response.data.data.name);
                                  this.$store.commit('setUserEmail',response.data.data.email);
                                  this.$router.push('/userpage');
+                                 localStorage.setItem("access-token", response.headers["access-token"])
+                                 localStorage.setItem("client", response.headers.client)
+                                 localStorage.setItem("uid", response.headers.uid)
+                                 localStorage.setItem("token-type", response.headers["token-type"])
+
               })
               .catch(error => console.log(error))
 
