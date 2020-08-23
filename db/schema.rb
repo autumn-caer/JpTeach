@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_07_194426) do
+ActiveRecord::Schema.define(version: 2020_08_15_064230) do
 
   create_table "employees", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
@@ -20,6 +20,20 @@ ActiveRecord::Schema.define(version: 2020_07_07_194426) do
     t.date "joined_date"
     t.bigint "payment"
     t.text "note"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "test_forms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.text "content"
+    t.integer "answer"
+    t.string "option_one"
+    t.string "option_two"
+    t.string "option_three"
+    t.string "option_four"
+    t.string "user_name"
+    t.string "user_email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
