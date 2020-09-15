@@ -4,8 +4,9 @@ import LogIn from './packs/components/devise/log_in.vue';
 import userPage from './packs/components/devise/userpage.vue';
 import listView from './packs/components/test/list_view.vue';
 import create from './packs/components/test/create.vue';
-import test from './packs/components/test/test.vue';
+import testList from './packs/components/test/test_list.vue';
 import home from './packs/components/home/home.vue';
+import newForm from './packs/components/test/new_form.vue';
 
 const routes = [
      { path: '/', name: 'SignIn', component: SignIn } ,
@@ -14,7 +15,9 @@ const routes = [
      { path: '/listview', name: 'listView', component: listView},
      { path: '/create', name: 'create', component: create},
      { path: '/home', name: 'home', component: home},
-     { path: '/test', name: 'test', component: test},
+     { path: '/testlist', name: 'testList', component: testList},
+     { path: '/test_form/:id', name: 'testList', component: create},
+     { path: '/newform', name: 'newForm', component: newForm},
   ];
 
 export default new VueRouter({ mode: 'history', routes });

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_15_064230) do
+ActiveRecord::Schema.define(version: 2020_08_24_232505) do
 
   create_table "employees", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
@@ -22,6 +22,16 @@ ActiveRecord::Schema.define(version: 2020_08_15_064230) do
     t.text "note"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "test_form_headers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "header_name"
+    t.string "test_type"
+    t.integer "question_num"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_test_form_headers_on_user_id"
   end
 
   create_table "test_forms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -36,6 +46,8 @@ ActiveRecord::Schema.define(version: 2020_08_15_064230) do
     t.string "user_email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "test_form_header_id"
+    t.index ["test_form_header_id"], name: "index_test_forms_on_test_form_header_id"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -68,4 +80,6 @@ ActiveRecord::Schema.define(version: 2020_08_15_064230) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "test_form_headers", "users"
+  add_foreign_key "test_forms", "test_form_headers"
 end
