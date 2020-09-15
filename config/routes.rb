@@ -9,7 +9,8 @@ Rails.application.routes.draw do
   # APIコントローラへのルーティング
   namespace :api, {format: 'json'} do
     namespace :v1 do
-      resources :test_form, only: [:index, :show]
+      resources :test_form
+      resources :test_form_header, only: [:index, :show]
       resources :employees, only: [:index, :show]
     end
   #   mount_devise_token_auth_for 'User', at: 'auth', controllers: {

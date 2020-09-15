@@ -19,10 +19,10 @@
                   :label="'question' + item.id" 
                   required></v-textarea>
                   <v-radio-group v-model="item.answer" row>
-                    <v-radio :label="item.option_one" :value="item.option_one" color="brown darken-3"></v-radio>
-                    <v-radio :label="item.option_two" :value="item.option_two" color="brown darken-3"></v-radio>
-                    <v-radio :label="item.option_three" :value="item.option_three" color="brown darken-3"></v-radio>
-                    <v-radio :label="item.option_four" :value="item.option4_four" color="brown darken-3"></v-radio>
+                    <v-radio v-if="item.option_one !== null" :label="item.option_one" :value="1" color="brown darken-3"></v-radio>
+                    <v-radio v-if="item.option_two !== null" :label="item.option_two" :value="2" color="brown darken-3"></v-radio>
+                    <v-radio v-if="item.option_three !== null" :label="item.option_three" :value="3" color="brown darken-3"></v-radio>
+                    <v-radio v-if="item.option_four !== null" :label="item.option_four" :value="4" color="brown darken-3"></v-radio>
                    </v-radio-group>
                    <v-divider :inset="inset" :dark="dark" class ="md-6"></v-divider>
                 </div>
@@ -43,37 +43,21 @@
         inset: false,
         dark: false,
         info: '',
-        items: [
-          {id: '1', 
-           content: '問題1', 
-           answer: 'one', 
-           option_one: 'one', 
-           option_two: 'two', 
-           option_three: 'three', 
-           option_four: 'four',
-           },
-           {id: '2', 
-           content: '問題2', 
-           answer: 'one', 
-           option_one: 'one', 
-           option_two: 'two', 
-           option_three: 'three', 
-           option_four: 'four',
-           },
-        ]
+        top: '',
+        items: []
       }
     },
      mounted: function(){
             console.log('mounted');
             axios
-            .get('http://localhost:3000/api/v1/test_form', {
+            .get('http://localhost:3000/api/v1/test_form/' + this.$route.params.id, {
                email: this.email,
               
             })
             .then(response => {
               this.info = response.data;
                 for (var key in response.data) {
-                  this.items.push(response.data[key]);
+                   this.items.push(response.data[key]);
                 }
             })
             .catch      
