@@ -21,6 +21,7 @@
                   auto-grow
                   v-model="item.content"
                   :label="'question' + item.id" 
+                  :rows = rows
                   required></v-textarea>
 
                   <v-radio-group v-model="item.answer" row>
@@ -64,6 +65,8 @@
   import axios from 'axios';
   import NavBar from '../shared/navbar.vue';
   import headerTestTypes from '../../../mixIns/headerTestTypeList'
+  import Config from '../../../const/config'
+  
   export default {
     mixins: [ headerTestTypes ],
     data() {
@@ -72,6 +75,7 @@
         dark: false,
         idCount: 1,
         info:'',
+        rows: Config.TEST_TEXT_ROWS,
         header_name:'',
         question_num: 0,
         items: [
@@ -124,23 +128,21 @@
              data = { 
                content: element.content, 
                answer: element.answer, 
-               option_one: '', 
-               option_two: '',
-               option_three: '',
-               option_four: '', 
+               options: element.options
              }
-             for (let step = 0; step < element.options.length; step++) {
-               if (step == 0) {
-                 data.option_one = element.options[step]
-               }
-               if (step == 1) {
-                 data.option_two = element.options[step]
-               }if (step == 2) {
-                 data.option_three = element.options[step]
-               }if (step == 3) {
-                 data.option_four = element.options[step]
-               }
-             }
+            //  for (let step = 0; step < element.options.length; step++) {
+            //    if (step == 0) {
+            //      data.option_one = element.options[step]
+            //    }
+            //    if (step == 1) {
+            //      data.option_two = element.options[step]
+            //    }if (step == 2) {
+            //      data.option_three = element.options[step]
+            //    }if (step == 3) {
+            //      data.option_four = element.options[step]
+            //    }
+            //  }
+             
              params.push(data)
         });
   

@@ -17,6 +17,7 @@
                   auto-grow
                   v-model="item.content"
                   :label="'question' + item.id" 
+                  :rows = rows
                   required></v-textarea>
                   <v-radio-group v-model="item.answer" row>
                     <v-radio v-if="item.option_one !== null" :label="item.option_one" :value="1" color="brown darken-3"></v-radio>
@@ -37,11 +38,14 @@
   // axiosを読み込む
   import axios from 'axios';
   import NavBar from '../shared/navbar.vue';
+  import Config from '../../../const/config'
+  
   export default {
     data() {
       return {
         inset: false,
         dark: false,
+        rows: Config.TEST_TEXT_ROWS,
         info: '',
         top: '',
         items: []
