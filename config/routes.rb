@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       resources :test_form
       resources :test_form_header, only: [:index, :show]
       resources :employees, only: [:index, :show]
+      resources :test_answer
     end
   #   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
   #     registrations: 'api/auth/registrations'

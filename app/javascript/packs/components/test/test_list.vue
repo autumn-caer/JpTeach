@@ -77,7 +77,7 @@
         },
     methods: {
       toEditPage (id) {
-           this.$router.push('/test_form/' + id); 
+           this.$router.push('/test_answer/' + id); 
         return;
       }
     },
