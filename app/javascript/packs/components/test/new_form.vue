@@ -130,19 +130,6 @@
                answer: element.answer, 
                options: element.options
              }
-            //  for (let step = 0; step < element.options.length; step++) {
-            //    if (step == 0) {
-            //      data.option_one = element.options[step]
-            //    }
-            //    if (step == 1) {
-            //      data.option_two = element.options[step]
-            //    }if (step == 2) {
-            //      data.option_three = element.options[step]
-            //    }if (step == 3) {
-            //      data.option_four = element.options[step]
-            //    }
-            //  }
-             
              params.push(data)
         });
   
@@ -151,10 +138,13 @@
                 test_form_header: testFormHeader,
                 test_forms: params
               })
-              .then(response => {this.info = response.data.data.name;
-     
+              .then(response => {
+                this.info = response.data.data.name;
+                console.log('new form registed');
               })
+              .then(this.$router.push('/testlist'))
               .catch(error => this.info = error)
+
 
       }
 
