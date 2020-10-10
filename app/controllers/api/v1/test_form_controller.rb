@@ -1,6 +1,8 @@
 class Api::V1::TestFormController < ApiController
-  before_action :set_tesfForms, only: [:show]
+  before_action :set_tesfForms, only: [:show, :update]
   before_action :text_check # この行を追加！
+
+  include TestFormOptions
 
   # ActiveRecordのレコードが見つからなければ404 not foundを応答する
   rescue_from ActiveRecord::RecordNotFound do |exception|
@@ -13,10 +15,33 @@ class Api::V1::TestFormController < ApiController
   end
 
   def show
-    render json: @tesfForms
+    results = Array.new
+    testFormHeader = TestFormHeader.find(params[:id])
+    # .select(:header_name,:test_type)
+
+    @tesfForms.each do | testForm |
+
+      #テスト選択肢を取得
+      options = getTestFormOptions(testForm.id)
+
+      #画面用配列に設定
+      tmp = testForm.attributes
+      #回答
+      tmp[:options] = options
+
+      #配列に入れる
+      results.push(tmp)
+    end
+
+    rtnHash = {}
+    rtnHash[:testFormHeader] = testFormHeader
+    rtnHash[:testForms] = results
+    rtnHash[:message] =  params[:message]
+
+    render json: rtnHash
   end
 
-  def create 
+  def create
     @tesfFormHeader = TestFormHeader.new(headerTestForm_param)
     @testForms = []
     testFormOptions = []
@@ -33,14 +58,14 @@ class Api::V1::TestFormController < ApiController
       new_record = @tesfFormHeader.test_form.build(testForm)
 
       #選択肢の数だけループ
-      testFormOption[:options].each_with_index do |option, i| 
+      testFormOption[:options].each_with_index do |option, i|
         opt = {}
         opt[:label] = option
         opt[:display_order] = i
         if i == answer
-          opt[:correct] = CORRECT_ANSWER
+          opt[:correct] = CONSTANTS::TESTFORM::CORRECT_ANSWER
         else
-          opt[:correct] = WRONG_ANSWER
+          opt[:correct] = CONSTANTS::TESTFORM::WRONG_ANSWER
         end
 
         #@tesfFormHに関連づいたtestFormOptionオブジェクトとして作成
@@ -61,25 +86,62 @@ class Api::V1::TestFormController < ApiController
     render json: @testform
   end
 
-  def update 
-    
+  def update
+    results = Array.new
+    testFormOptions = []
+    testForms = []
+
+    byebug
+    hedaer_param = params.require(:test_form_header)
+    selectHeader = TestFormHeader.find(hedaer_param[:id])
+    selectHeader[:header_name] = hedaer_param[:header_name]
+    selectHeader[:test_type] = hedaer_param[:test_type]
+
+    params.require(:test_forms).each do |test|
+
+      #test_formの変更点を設定
+      selectForm = TestForm.find(test[:id])
+      selectForm[:content] = test[:content]
+      testForms.push(selectForm)
+      byebug
+
+      #test_form_optionsのパラメータを取得
+      testFormOption = testformoption_update_params(test)
+      #選択肢の数だけループ
+      testFormOption[:options].each_with_index do |option, i|
+        selectRecord = TestFormOption.find(option[:id])
+        selectRecord[:display_order] = i
+        selectRecord[:label] = option[:label]
+        testFormOptions.push(selectRecord)
+      end
+    end
+
+    if selectHeader.save && testForms.each{|record| record.save} &&  testFormOptions.each{|option| option.save}
+      @result = "success"
+    else
+      @result = "fail"
+    end
+
+    #更新後の値を取得して画面に返却
+    params[:message] = "messsage ： change confirmd"
+    show()
   end
-  
+
   private
-    def set_tesfForms
-      @tesfForms= TestForm.where(test_form_header_id: params[:id])
-    end
-
-    def headerTestForm_param
-      params.require(:test_form_header).permit(:header_name,:question_num,:user_id,:test_type)
-    end
-
     def testform_params(params)
       params.permit(:content)
     end
 
     def testformoption_params(params)
-      params.permit(options: [])
+      params.permit(:options => [])
+    end
+
+    def testformoption_update_params(params)
+      params.permit(options:  [:id,:label,:updated_at])
+    end
+
+    def getTestFormOptionsRandom(id)
+      TestFormOption.where(test_form_id: id).select(:id,:label,:test_form_id,:display_order).order("RAND()")
     end
 
 end

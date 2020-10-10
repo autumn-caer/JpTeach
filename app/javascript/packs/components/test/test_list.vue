@@ -17,15 +17,16 @@
                   <v-btn
                     color="orange"
                     text
-                    @click="toEditPage(item.id)"
+                    @click="toAnswerPage(item.id)"
                   >
-                    Share
+                    Answer
                   </v-btn>
                   <v-btn
                     color="orange"
                     text
+                    @click="toEditPage(item.id)"
                   >
-                    Explore
+                    Edit
                   </v-btn>
                   <v-btn icon>
                     <v-icon>mdi-heart</v-icon>
@@ -62,7 +63,7 @@
       HeaderTestFilter,
     },
      mounted: function(){
-            console.log('mounted');
+            console.log('testlist mounted');
             axios
             .get('http://localhost:3000/api/v1/test_form_header', {
                email: this.email,
@@ -77,6 +78,10 @@
         },
     methods: {
       toEditPage (id) {
+           this.$router.push('/test_edit/' + id); 
+        return;
+      },
+      toAnswerPage (id) {
            this.$router.push('/test_answer/' + id); 
         return;
       }

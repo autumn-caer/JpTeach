@@ -1,6 +1,8 @@
 class Api::V1::TestAnswerController < ApiController
     before_action :set_tesfForms, only: [:show,:update]
     before_action :text_check # この行を追加！
+
+    include TestFormOptions
   
     # ActiveRecordのレコードが見つからなければ404 not foundを応答する
     rescue_from ActiveRecord::RecordNotFound do |exception|
@@ -46,13 +48,15 @@ class Api::V1::TestAnswerController < ApiController
         testForm = @tesfForms.find(permitted[:id])
 
         tmp = testForm.attributes
+        #正解をセット
         tmp[:answer] = testForm.display_order
+        #自分の解答をセット
         tmp[:yourAnswer] = permitted[:answer]
 
-        if (permitted[:answer] == testForm.display_order)  
-          tmp[:result] = CORRECT_ANSWER
+        if (tmp[:yourAnswer] == testForm.display_order)  
+          tmp[:result] = CONSTANTS::TESTFORM::CORRECT_ANSWER
         else
-          tmp[:result] = WRONG_ANSWER
+          tmp[:result] = CONSTANTS::TESTFORM::WRONG_ANSWER
         end
 
         #テスト選択肢を取得
@@ -69,25 +73,7 @@ class Api::V1::TestAnswerController < ApiController
     end
     
     private
-      def set_tesfForms
-        @tesfForms = TestForm.joins(:test_form_options)
-                            .where(test_form_header_id: params[:id])
-                            .where(test_form_options: {correct: CORRECT_ANSWER})
-                            .select("test_forms.id, 
-                                    test_forms.content,
-                                    test_form_options.display_order")
-      end
-  
-      def headerTestForm_param
-        params.require(:test_form_header).permit(:header_name,:question_num,:user_id,:test_type)
-      end
-  
       def testform_params(params)
-        params.permit(:id,:content,:answer,:option_one,:option_two,:option_three,:option_four)
+        params.permit(:id,:content,:answer)
       end
-
-      def getTestFormOptions(id)
-        TestFormOption.where(test_form_id: id).select(:label, :display_order).order(:display_order)
-      end
-  
   end
