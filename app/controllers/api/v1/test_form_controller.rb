@@ -42,8 +42,19 @@ class Api::V1::TestFormController < ApiController
   end
 
   def create
-    @tesfFormHeader = TestFormHeader.new(headerTestForm_param)
-    @testForms = []
+    #version管理レコードを作成
+    test_form_version_operation_id = params["test_form_version_operation_id"]
+
+    byebug
+    testFormVersionOperation = nil
+    if test_form_version_operation_id.nil?
+      testFormVersionOperation = TestFormVersionOperation.new()
+    else
+      testFormVersionOperation = TestFormVersionOperation.find(test_form_version_operation_id)
+    end
+
+    tesfFormHeader = testFormVersionOperation.test_form_header.build(headerTestForm_param)
+    testForms = []
     testFormOptions = []
 
     params.require(:test_forms).each do |test|
@@ -55,7 +66,7 @@ class Api::V1::TestFormController < ApiController
       testFormOption = testformoption_params(test)
 
       #@tesfFormHeaderに関連づいたtestFormオブジェクトとして作成
-      new_record = @tesfFormHeader.test_form.build(testForm)
+      new_record = tesfFormHeader.test_form.build(testForm)
 
       #選択肢の数だけループ
       testFormOption[:options].each_with_index do |option, i|
@@ -74,28 +85,30 @@ class Api::V1::TestFormController < ApiController
       end
 
       #再び配列に入れる
-      @testForms.push(new_record)
+      testForms.push(new_record)
     end
 
-    if  @tesfFormHeader.save && @testForms.each{|record| record.save} && testFormOptions.each{|option| option.save}
+    if testFormVersionOperation.save  \
+      && tesfFormHeader.save \
+      && testForms.each{|record| record.save}  \
+      && testFormOptions.each{|option| option.save}
       @result = "success"
     else
       @result = "fail"
     end
 
-    render json: @testform
+    render json: testForms
   end
 
   def update
     results = Array.new
     testFormOptions = []
     testForms = []
-
-    byebug
-    hedaer_param = params.require(:test_form_header)
-    selectHeader = TestFormHeader.find(hedaer_param[:id])
-    selectHeader[:header_name] = hedaer_param[:header_name]
-    selectHeader[:test_type] = hedaer_param[:test_type]
+    
+    header_param = params.require(:test_form_header)
+    selectHeader = TestFormHeader.find(header_param[:id])
+    selectHeader[:header_name] = header_param[:header_name]
+    selectHeader[:test_type] = header_param[:test_type]
 
     params.require(:test_forms).each do |test|
 
@@ -103,7 +116,6 @@ class Api::V1::TestFormController < ApiController
       selectForm = TestForm.find(test[:id])
       selectForm[:content] = test[:content]
       testForms.push(selectForm)
-      byebug
 
       #test_form_optionsのパラメータを取得
       testFormOption = testformoption_update_params(test)

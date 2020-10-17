@@ -3,9 +3,35 @@
         <v-row min-height="700">
           <navBar></navBar>
           <v-col md="10" class ="pa-md-0">
+            <v-row no-gutters>
+              <v-col
+                cols="6"
+                sm="6"
+              >
+                <v-card
+                  class="pa-2"
+                  outlined
+                  tile
+                >
+                  <v-card-title class="headline">Test Sample Form</v-card-title>
+                </v-card>
+              </v-col>
+              <v-col
+                cols="6"
+                sm="6"
+              >
+                <v-card
+                  class="pa-2"
+                  outlined
+                  tile
+                >
+                   <v-card-title class="headline">Version: {{this.version}}</v-card-title>
+                </v-card>
+                 
+              </v-col>
+            </v-row>
             <v-card class ="pa-md-10" 
             　min-height="300">
-              <v-card-title class="headline">Test Sample Form</v-card-title>
               <v-form
                 ref="form"
                 v-model="valid"
@@ -57,7 +83,8 @@
             </v-card>
           </v-col>
           </v-row>
-          <p>{{this.items}}</p>
+          <p>{{this.info}}</p>
+          <div>{{getTestFormHeaderId}}</div>
       </div>
 </template>
 <script>
@@ -66,6 +93,7 @@
   import NavBar from '../shared/navbar.vue';
   import headerTestTypes from '../../../mixIns/headerTestTypeList'
   import Config from '../../../const/config'
+  import { mapGetters } from 'vuex';
   
   export default {
     mixins: [ headerTestTypes ],
@@ -78,6 +106,8 @@
         rows: Config.TEST_TEXT_ROWS,
         header_name:'',
         question_num: 0,
+        version: 0,
+        test_form_version_operation_id:'',
         items: [
           {id: 1 ,
            content: '問題1', 
@@ -90,6 +120,46 @@
     },
      mounted: function(){
         console.log('mounted');
+        let testFormHeaderId = this.$store.getters.getTestFormHeaderId
+        if (testFormHeaderId) {
+            axios
+            .get('http://localhost:3000/api/v1/test_form/' + testFormHeaderId, {
+              headers: { "Content-Type": "application/json" }
+            })
+            .then(response => {
+       
+              this.items = []
+              this.info = response.data;
+              this.message = response.data.message
+              this.header_name = response.data.testFormHeader.header_name
+              this.testType = response.data.testFormHeader.test_type
+              this.test_form_version_operation_id = response.data.testFormHeader.test_form_version_operation_id
+              this.version = response.data.testFormHeader.version + 1
+
+              this.idCount = 0
+              response.data.testForms.forEach(testForm =>{
+                this.idCount++
+                let data = {
+                  id: this.idCount ,
+                  content: testForm.content, 
+                  answer: testForm.display_order, 
+                  options:[]
+                }
+                
+                testForm.options.forEach(option =>{
+                  data.options.push(option.label)
+                })
+
+                this.items.push(data);
+              })
+
+
+              this.$store.commit('setTestFormHeaderId','');
+            })
+            .catch      
+        }
+
+
     },
     methods: {
       doAdd () {
@@ -119,7 +189,8 @@
           user_id: '1',
           test_type: this.testType,
           header_name: this.header_name,
-          question_num: this.items.length
+          question_num: this.items.length,
+          version: this.version
         }
         
         var params = [];
@@ -135,6 +206,7 @@
   
          axios
               .post('http://localhost:3000/api/v1/test_form', {
+                test_form_version_operation_id: this.test_form_version_operation_id,
                 test_form_header: testFormHeader,
                 test_forms: params
               })
@@ -150,6 +222,12 @@
 
     },
     computed: {
+      ...mapGetters([
+      'getUserId',
+      'getUserName',
+      'getEmail',
+      'getTestFormHeaderId'
+      ]),
       currntItems() {
         return this.items;
       }

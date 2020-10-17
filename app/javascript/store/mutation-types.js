@@ -8,6 +8,9 @@ const mutations = {
     setUserEmail(state, email){
         state.email  = email
     },
+    setTestFormHeaderId(state, testFormHeaderId){
+        state.testFormHeaderId  = testFormHeaderId
+    },
 };
 
 export default mutations;

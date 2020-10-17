@@ -37,7 +37,13 @@
                   outlined
                   tile
                 >
+                  <v-btn
+                    color="success"
+                    class="mr-4"
+                    @click="createNewForm"
+                  >新規version作成</v-btn> 
                 </v-card>
+                 
               </v-col>
             </v-row>
               <v-form
@@ -57,9 +63,9 @@
                   :label="'question' + item.id" 
                   :rows = rows
                   required></v-textarea>
-                  <v-radio-group v-model="item.display_order" row>
+                  <v-radio-group v-model="item.display_order" row readonly>
                      <div v-for="(option, index) in item.options" :key="index">
-                      <testRadio :optionLabel="option.label" :optionValue="option.display_order" :on-icon="setAnswerRadio" :readonly="checkReadOnly" color="brown darken-3"></testRadio>
+                      <testRadio :optionLabel="option.label" :optionValue="option.display_order" :on-icon="setAnswerRadio" color="brown darken-3"></testRadio>
                      </div>
                   </v-radio-group>
                    <div v-for="(option,i) in item.options" :key="i">
@@ -143,9 +149,6 @@
       testRadio: TestRadio
     },
     methods: {
-      checkAnswer(kbn) {
-        return kbn === Config.CORRECT
-      },
       editForm () {
         var userId = this.$store.getters.getUserId
         if (!userId) {
@@ -192,42 +195,19 @@
               
           })
           .catch(error => this.info = error)
+      },
+      createNewForm () {
+        this.$store.commit('setTestFormHeaderId',this.test_form_header_id);
+        this.$router.push('/newform'); 
+        return;
       }
     },
     computed: {
-      isAnswerMode() {
-        return this.mode === Config.MODE_ANSWER
-      },
-      isCheckMode() {
-        return this.mode === Config.MODE_CHECK
-      },
-      checkResult() {
-        let total = this.items.length
-        let correctNum 
-              = this.items.filter(element => element.result === String(Config.CORRECT))
-        return  correctNum.length + "/"  + total
-      },
       setAnswerRadio() {
         if (this.mode === Config.MODE_CHECK) {
           return  "mdi-checkbox-marked-circle"
         }
         return "$radioOn"
-      },
-      checkReadOnly() {
-        if (this.mode === Config.MODE_CHECK) {
-          return  true
-        }
-        return false
-      },
-      getOptionLabel() {
-        return function(option) {
-          return option.label
-        }
-      },
-      getOptionDisplayOrder() {
-        return function(option) {
-          return option.display_order
-        }
       },
       changeOptionsOrder() {
         return function(index) {
