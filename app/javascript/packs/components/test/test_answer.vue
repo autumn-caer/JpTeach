@@ -93,6 +93,7 @@
         dark: false,
         info: '',
         top: '',
+        test_form_header_id: '',
         mode: Config.MODE_ANSWER,
         rows: Config.TEST_TEXT_ROWS,
         items: [],
@@ -114,6 +115,7 @@
             })
             .then(response => {
               this.info = response.data;
+              this.test_form_header_id = response.data.testFormHeader.id
               for (var key in response.data.testForms) {
                   this.items.push(response.data.testForms[key]);
               }
@@ -143,6 +145,9 @@
         }
         
         var params = [];
+        let test_form_header = {
+          id: this.test_form_header_id
+        };
         let data = {};
         this.items.forEach(element =>{
              data = { 
@@ -155,6 +160,7 @@
 
         axios
           .put('http://localhost:3000/api/v1/test_answer/' + this.$route.params.id, {
+            test_form_header: test_form_header,
             test_forms: params
           })
           .then(response => {
@@ -167,9 +173,6 @@
               
           })
           .catch(error => this.info = error)
-      },
-      changeOptionsorder(radioGroup) {
-
       }
     },
     computed: {

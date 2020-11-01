@@ -4,7 +4,9 @@ import mutations from './mutation-types';
 const state = {
   userId: '',   
   userName: '',
-  email: ''
+  email: '',
+  testFormHeaderId: ''
+
 };
 
 const getters = {
@@ -16,7 +18,11 @@ const getters = {
   },
   getEmail(state){
     return　state.email;
-  }
+  },
+  getTestFormHeaderId(state){
+    return　state.testFormHeaderId;
+  },
+
 };
 
 export default {

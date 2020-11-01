@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_26_120302) do
+ActiveRecord::Schema.define(version: 2020_10_17_231116) do
 
   create_table "employees", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
@@ -31,6 +31,9 @@ ActiveRecord::Schema.define(version: 2020_09_26_120302) do
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "version", default: 0
+    t.bigint "test_form_version_operation_id"
+    t.index ["test_form_version_operation_id"], name: "index_test_form_headers_on_test_form_version_operation_id"
     t.index ["user_id"], name: "index_test_form_headers_on_user_id"
   end
 
@@ -44,12 +47,40 @@ ActiveRecord::Schema.define(version: 2020_09_26_120302) do
     t.index ["test_form_id"], name: "index_test_form_options_on_test_form_id"
   end
 
+  create_table "test_form_version_operations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "test_forms", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "test_form_header_id"
     t.index ["test_form_header_id"], name: "index_test_forms_on_test_form_header_id"
+  end
+
+  create_table "test_result_headers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "correct_num"
+    t.integer "try_time"
+    t.bigint "test_form_header_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id"
+    t.index ["test_form_header_id"], name: "index_test_result_headers_on_test_form_header_id"
+    t.index ["user_id"], name: "index_test_result_headers_on_user_id"
+  end
+
+  create_table "test_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "answer_option_id"
+    t.bigint "your_answer_option_id"
+    t.string "option_display_orders"
+    t.bigint "test_result_header_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["answer_option_id"], name: "index_test_results_on_answer_option_id"
+    t.index ["test_result_header_id"], name: "index_test_results_on_test_result_header_id"
+    t.index ["your_answer_option_id"], name: "index_test_results_on_your_answer_option_id"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -82,7 +113,13 @@ ActiveRecord::Schema.define(version: 2020_09_26_120302) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "test_form_headers", "test_form_version_operations"
   add_foreign_key "test_form_headers", "users"
   add_foreign_key "test_form_options", "test_forms"
   add_foreign_key "test_forms", "test_form_headers"
+  add_foreign_key "test_result_headers", "test_form_headers"
+  add_foreign_key "test_result_headers", "users"
+  add_foreign_key "test_results", "test_form_options", column: "answer_option_id"
+  add_foreign_key "test_results", "test_form_options", column: "your_answer_option_id"
+  add_foreign_key "test_results", "test_result_headers"
 end

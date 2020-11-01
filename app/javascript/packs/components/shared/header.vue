@@ -51,7 +51,7 @@ export default {
   data: function () {
     return {
       items: [
-        'userpage', 'login','listview','create','home','testlist','newform'
+        'userpage', 'login','listview','create','home','testlist','newform','resultlist'
       ]
     }
   },
@@ -117,6 +117,11 @@ export default {
         return;
       }
 
+      if (pathUrl == 'resultlist') {
+        //新規作成に移動
+        this.$router.push('/' + pathUrl); 
+        return;
+      }
         //ROOTに移動
         this.$router.push('/');
       }

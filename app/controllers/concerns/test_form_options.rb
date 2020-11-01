@@ -1,7 +1,7 @@
 module TestFormOptions extend ActiveSupport::Concern
     included do
         def headerTestForm_param
-            params.require(:test_form_header).permit(:header_name,:question_num,:user_id,:test_type)
+            params.require(:test_form_header).permit(:header_name,:question_num,:user_id,:test_type,:test_form_version_operation_id,:version)
         end
 
         def set_tesfForms
@@ -15,6 +15,13 @@ module TestFormOptions extend ActiveSupport::Concern
 
         def getTestFormOptions(id)
             TestFormOption.where(test_form_id: id).select(:id,:label,:display_order,:updated_at).order(:display_order)
+        end
+
+        def getTestFormOptionsHash(id)
+            TestFormOption.where(test_form_id: id)
+                           .select(:id,:label,:display_order,:updated_at)
+                           .order(:display_order)
+                           .map{|option| option.attributes}
         end
     end  
 end
