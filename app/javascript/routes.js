@@ -9,6 +9,8 @@ import testEdit from './packs/components/test/test_edit.vue';
 import testList from './packs/components/test/test_list.vue';
 import home from './packs/components/home/home.vue';
 import newForm from './packs/components/test/new_form.vue';
+import resultList from './packs/components/result/result_list.vue';
+import result from './packs/components/result/result.vue';
 
 const routes = [
      { path: '/', name: 'SignIn', component: SignIn } ,
@@ -22,6 +24,8 @@ const routes = [
      { path: '/test_answer/:id', name: 'testAnswer', component: testAnswer},
      { path: '/test_edit/:id', name: 'testEdit', component: testEdit},
      { path: '/newform', name: 'newForm', component: newForm},
+     { path: '/resultlist', name: 'resultList', component: resultList},
+     { path: '/result/:id', name: 'result', component: result},
   ];
 
 export default new VueRouter({ mode: 'history', routes });

@@ -49,6 +49,7 @@ class Api::V1::TestAnswerController < ApiController
 
       testResultHeader = {}
       testResultHeader[:try_time] = exist + 1
+      testResultHeader[:user_id] = '1'
       testResultHeader = testFormHeader.test_result_header.build(testResultHeader)
 
       testResults = []
@@ -86,7 +87,6 @@ class Api::V1::TestAnswerController < ApiController
         testResult[:answer_option_id] = correctOptionId.first["id"]
         testResult[:your_answer_option_id] = yourOptionId.first["id"]
         testResult[:option_display_orders] = optionDisplayOrders
-        byebug
         testResults.push(testResult)
        
         #再び配列に入れる
