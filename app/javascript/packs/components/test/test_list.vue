@@ -1,26 +1,32 @@
 <template>
       <div>
-        <v-row min-height="700">
-          <navBar></navBar>
-          <v-col md="10">
+        <v-container fluid>
+        <v-row min-height="700" no-gutters>
+          <v-col cols="12" >
             <v-card 
               v-for="(item, index) in items" :key="index" 
             　min-height="250"
-              class="ma-md-3">
+              class ="ma-lg-4 ma-md-3 ma-sm-3 ma-3 pa-lg-4 pa-md-4 pa-sm-8 pa-8">
+              
               <v-card-title class="headline" v-text="item.header_name"></v-card-title>
               <v-card-subtitle class="pb-0" :text-content.prop="item.test_type | HeaderTestFilter"></v-card-subtitle>
               <v-card-text class="text--primary">
                 <div v-text="item.id"></div>
                 <div v-text="item.name"></div>  
                 <div v-text="item.question_num"></div>
+                
                 <v-card-actions>
-                  <v-btn
-                    color="orange"
-                    text
-                    @click="toAnswerPage(item.id)"
-                  >
-                    Answer
-                  </v-btn>
+                  <v-row>
+                  <v-col lg="1" md="1" sm="12" cols="12">
+                    <v-btn
+                      color="orange"
+                      text
+                      @click="toAnswerPage(item.id)"
+                    >
+                      Answer
+                    </v-btn>
+                  </v-col>
+                  <v-col lg="1" md="1" sm="12" cols="12">
                   <v-btn
                     color="orange"
                     text
@@ -28,6 +34,8 @@
                   >
                     Edit
                   </v-btn>
+                  </v-col>
+                  <v-col lg="4" md="4" sm="12" cols="12">
                   <v-btn icon>
                     <v-icon>mdi-heart</v-icon>
                   </v-btn>
@@ -37,12 +45,14 @@
                   <v-btn icon>
                     <v-icon>mdi-share-variant</v-icon>
                   </v-btn>
+                  </v-col>
+                  </v-row>
                 </v-card-actions>
               </v-card-text>
             </v-card>
           </v-col>
           </v-row>
-          <p>{{this.items}}</p>
+        </v-container>
       </div>
 </template>
 <script>

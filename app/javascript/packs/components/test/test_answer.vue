@@ -1,14 +1,13 @@
 <template>
       <div>
+        <v-container>
         <v-row min-height="700">
-          <navBar></navBar>
-          <v-col md="10" class ="pa-md-0">
+          <v-col cols="12">
             <v-card class ="pa-md-10" 
             　min-height="300">
             <v-row no-gutters>
               <v-col
-                cols="6"
-                sm="6"
+                lg="6" md="6" sm="12" cols="12"
               >
                 <v-card
                   class="pa-2"
@@ -19,8 +18,7 @@
                 </v-card>
               </v-col>
               <v-col
-                cols="6"
-                sm="6"
+                lg="6" md="6" sm="12" cols="12"
               >
                 <v-card
                   class="pa-2"
@@ -33,6 +31,8 @@
                 </v-card>
               </v-col>
             </v-row>
+            <v-card class ="pa-lg-10 pa-md-10 pa-sm-8 pa-10"
+            　min-height="300">
               <v-form
                 ref="form"
                 v-model="valid"
@@ -69,15 +69,22 @@
                   </v-radio-group>
                   <v-divider :inset="inset" :dark="dark" class ="md-6"></v-divider>
                 </div>
-                <v-btn
-                  color="success"
-                  class="mr-4"
-                  @click="answerfForm"
-                >解答</v-btn>
+                <v-row>
+                  <v-col lg="4" md="4" sm="12" cols="12">
+                    <v-btn
+                      block
+                      color="success"
+                      class="mr-4"
+                      @click="answerfForm"
+                  >解答</v-btn>
+                </v-col>
+                </v-row>
               </v-form>
+            </v-card>
             </v-card>
           </v-col>
           </v-row>
+        </v-container>
           <p>{{this.info}}</p>
       </div>
 </template>

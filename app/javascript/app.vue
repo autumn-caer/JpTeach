@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <app-header></app-header>
-    <router-view></router-view>
+    <v-content class="green accent-4">
+      <router-view></router-view>
+    </v-content>
     <app-footer></app-footer>
   </v-app>
 </template>

@@ -1,5 +1,5 @@
 
-import '@mdi/font/css/materialdesignicons.css'
+
 import Vue from 'vue'
 import VueRouter from 'vue-router';
 import App from '../app.vue'
@@ -7,6 +7,7 @@ import store from '../store/store'
 import router from '../routes'; 
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.min.css"; // 追加
+import '@mdi/font/css/materialdesignicons.css'
 
 const vuetifyOptions = { icons: {iconfont: 'mdi', }}
 Vue.use(Vuetify); // 追加

@@ -1,8 +1,7 @@
 <template>
-  <div>
     <v-container fluid class="pa-md-0">
       <v-row>
-        <v-col md="6" class="pa-md-0">
+        <v-col lg="6" md="6" sm="12" cols="12" class="pa-md-0">
           <v-card
             class ="pa-md-6 profile"
             min-height="600"
@@ -10,9 +9,9 @@
             <div class="white--text text-h3">user page</div>
           </v-card>
         </v-col>
-        <v-col md="6" class="pa-md-0">
+        <v-col lg="6" md="6" sm="12" cols="12" class="pa-md-0">
           <v-card
-            class ="pa-md-6"
+            class ="pa-lg-8 pa-md-8 pa-sm-8 pa-8"
             min-height="600"
             >
             <v-card :elevation="0" color="amber lighten-5">
@@ -53,25 +52,31 @@
                 vertical
               ></v-divider>
             <v-form>
-              <v-btn
-                color="warning"
-                @click="backToRoot"
-                >
-                Back to URL
-              </v-btn>
-              <v-btn
-                color="warning"
-                @click="backToRoot"
-                >
-                Back to URL
-              </v-btn>
+              <v-row>
+                <v-col lg="4" md="4" sm="12" cols="12">
+                   <v-btn
+                    block
+                    color="warning"
+                    @click="backToRoot"
+                    >
+                    Back to URL
+                  </v-btn>
+                </v-col>
+                <v-col lg="4" md="4" sm="12" cols="12">
+                   <v-btn
+                    block
+                    color="warning"
+                    @click="backToRoot"
+                    >
+                    Back to URL
+                  </v-btn>
+                </v-col>
+              </v-row>
            </v-form>
           </v-card>
         </v-col>
       </v-row>
- 
     </v-container>
-  </div>
 </template>
 <script>
 import { mapGetters } from 'vuex';

@@ -1,84 +1,89 @@
 <template>
-      <div>
-        <v-row min-height="700">
-          <navBar></navBar>
-          <v-col md="10" class ="pa-md-0">
-            <v-card class ="pa-md-10" 
-            　min-height="300">
-            <v-row no-gutters>
-              <v-col
-                cols="6"
-                sm="6"
-              >
-                <v-card
-                  class="pa-2"
-                  outlined
-                  tile
-                >
-                  <v-card-title class="headline">Test Sample Form</v-card-title>
-                </v-card>
-              </v-col>
-              <v-col
-                cols="6"
-                sm="6"
-              >
-                <v-card
-                  class="pa-2"
-                  outlined
-                  tile
-                >
-                  <v-card-title class="headline"> 
-                    Score : 
-                    {{checkResult}}</v-card-title>
-                </v-card>
-              </v-col>
-            </v-row>
-              <v-form
-                ref="form"
-                v-model="valid"
-                lazy-validation
-              >
-                <v-divider :inset="inset" :dark="dark" class ="md-6"></v-divider>
-                <div v-for="(item, index) in items" :key="index" class="form">
-                  <v-textarea
-                  auto-grow
-                  v-model="item.content"
-                  :label="'question' + item.id" 
-                  readonly
-                  :rows = rows
-                  required></v-textarea>
-                  <div>
-                  <v-chip
-                    class="ma-2"
-                    color="primary"
-                    v-if = "checkAnswer(item.result)"
-                  ><v-icon>mdi-checkbox-marked-circle</v-icon>
-                    Correct                  </v-chip>
-                  <v-chip
-                    class="ma-2"
-                    color="red"
-                    text-color="white"
-                    v-if = "!checkAnswer(item.result)"
-                  ><v-icon>mdi-cancel</v-icon>
-                    Wrong
-                  </v-chip>
-                  <span v-if = "!checkAnswer(item.result)">your Answer:  {{getLabel(item)}}</span>
-                  </div>
-                  <v-radio-group v-model="item.answer" row>
-                    <v-radio v-for="(option, index) in item.options" :key="index" :label="option.label" :value="option.display_order" :on-icon="setAnswerRadio" :readonly="checkReadOnly" color="brown darken-3"></v-radio>
-                  </v-radio-group>
-                  <v-divider :inset="inset" :dark="dark" class ="md-6"></v-divider>
-                </div>
+  <v-container>
+    <v-row min-height="700">
+      <v-col class ="pa-md-0" cols="12">
+        <v-card class ="pa-10" 
+        　min-height="300">
+        <v-row no-gutters>
+          <v-col
+            lg="6" md="6" sm="12" cols="12"
+          >
+            <v-card
+              class="pa-2"
+              outlined
+              tile
+            >
+              <v-card-title class="headline">Test Sample Form</v-card-title>
+            </v-card>
+          </v-col>
+          <v-col
+            lg="6" md="6" sm="12" cols="12"
+          >
+            <v-card
+              class="pa-2"
+              outlined
+              tile
+            >
+              <v-card-title class="headline"> 
+                Score : 
+                {{checkResult}}</v-card-title>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-card class ="pa-lg-10 pa-md-10 pa-sm-8 pa-10"
+      　        min-height="300">
+          <v-form
+            ref="form"
+            v-model="valid"
+            lazy-validation
+          >
+            <v-divider :inset="inset" :dark="dark" class ="md-6"></v-divider>
+            <div v-for="(item, index) in items" :key="index" class="form">
+              <v-textarea
+              auto-grow
+              v-model="item.content"
+              :label="'question' + item.id" 
+              readonly
+              :rows = rows
+              required></v-textarea>
+              <div>
+              <v-chip
+                class="ma-2"
+                color="primary"
+                v-if = "checkAnswer(item.result)"
+              ><v-icon>mdi-checkbox-marked-circle</v-icon>
+                Correct                  </v-chip>
+              <v-chip
+                class="ma-2"
+                color="red"
+                text-color="white"
+                v-if = "!checkAnswer(item.result)"
+              ><v-icon>mdi-cancel</v-icon>
+                Wrong
+              </v-chip>
+              <span v-if = "!checkAnswer(item.result)">your Answer:  {{getLabel(item)}}</span>
+              </div>
+              <v-radio-group v-model="item.answer" row>
+                <v-radio v-for="(option, index) in item.options" :key="index" :label="option.label" :value="option.display_order" :on-icon="setAnswerRadio" :readonly="checkReadOnly" color="brown darken-3"></v-radio>
+              </v-radio-group>
+              <v-divider :inset="inset" :dark="dark" class ="md-6"></v-divider>
+            </div>
+            <v-row>
+              <v-col lg="4" md="4" sm="12" cols="12">
                 <v-btn
+                  block
                   color="success"
                   class="mr-4"
                   @click="answerfForm"
                 >解答</v-btn>
-              </v-form>
-            </v-card>
-          </v-col>
-          </v-row>
-      </div>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-card>
+        </v-card>
+      </v-col>
+      </v-row>
+  </v-container>
 </template>
 <script>
   // axiosを読み込む
