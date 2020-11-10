@@ -1,12 +1,11 @@
 <template>
-<div class="green accent-4">
-    <v-container>
-      <v-row>
-      <v-col md="6"
+<div>
+    <v-container fluid>
+      <v-row justify="center">
+      <v-col lg="5" md="5" sm="12" cols="12"
             class="">
         <v-card
-          class ="pa-md-4"
-          max-width="900"
+          class ="pa-lg-4 pa-md-4 pa-sm-8 pa-8" outlined tile
           min-height="380"
         >
           <v-card-title class="headline">JpTech Sign Up</v-card-title>
@@ -16,11 +15,10 @@
           </v-card-actions>
         </v-card> 
       </v-col>
-      <v-col md="6"
-              class="ml-auto">
+      <v-col lg="5" md="5" sm="12" cols="12"
+              class="">
         <v-card
-          class ="pa-md-8 float-lg-right d-flex"
-          max-width="700"
+          class ="pa-lg-8 pa-md-8 pa-sm-8 pa-10" outlined tile
           min-height="380"
         >
           <v-form
@@ -66,31 +64,42 @@
                 label="Do you agree?"
                 required
             ></v-checkbox>
-            <v-btn
+            <v-row justify="center">
+              <v-col lg="3" md="3" sm="12" cols="12">
+                <v-btn
+                block
                 :disabled="!valid"
                 color="success"
                 class="mr-4"
                 @click="createUser"
-            >
-                Validate
-            </v-btn>
-            <v-btn
+              >
+                  Validate
+              </v-btn>
+              </v-col>
+              <v-col lg="4" md="4" sm="12" cols="12">
+                <v-btn
+                block
                 color="error"
                 class="mr-4"
                 @click="reset"
-            >
-                Reset Form
-            </v-btn>
-            <v-btn
+                >
+                    Reset Form
+                </v-btn>
+              </v-col>
+              <v-col lg="5" md="5" sm="12" cols="12">
+                <v-btn
+                block
                 color="warning"
                 @click="resetValidation"
-            >
-                Reset Validation
-            </v-btn>
+                >
+                    Reset Validation
+                </v-btn>
+              </v-col>
+            </v-row>
             </v-form>
           </v-card>
-        <v-col>
-      <v-row>
+        </v-col>
+      </v-row>
     <v-container>
 </div>
 </template>
@@ -129,8 +138,16 @@
       ],
       checkbox: false,
     }),
+ 
+    mounted: function(){
+      console.log(this.$vuetify.breakpoint)
+    },
 
     methods: {
+      log () {
+        console.log('here')
+         console.log(this.$vuetify.breakpoint)
+      },
       validate () {
         this.$refs.form.validate()
       },
