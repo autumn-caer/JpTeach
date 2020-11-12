@@ -3,7 +3,7 @@
   <v-row min-height="700">
     <v-col cols="12" sm="12" md="6" lg="6">
       <v-card 
-        v-for="(item, index) in items" :key="index" 
+        v-for="(item, index) in displayItems" :key="index" 
       　min-height="250"
         class="ma-lg-4 ma-md-3 ma-sm-3 ma-3 pa-lg-4 pa-md-4 pa-sm-8 pa-8">
         <v-card-title class="headline" v-text="item.testFormHeaders.header_name">tes</v-card-title>
@@ -54,6 +54,15 @@
           </v-card-actions>
         </v-card-text>
       </v-card>
+      <div class="text-center">
+          <v-pagination
+            v-model="page"
+            :length="length"
+            @input = "pageChange"
+            color = "brown"
+          ></v-pagination>
+      </div>
+
     </v-col>
     <v-col cols="12" sm="12" md="6" lg="6">
       <v-card 
@@ -75,8 +84,12 @@
       return {
         inset: false,
         dark: false,
+        page: 1,
+        pageSize: 3,
+        length: 0,
         info: '',
-        items: []
+        items: [],
+        displayItems: []
       }
     },
     filters: {
@@ -96,6 +109,8 @@
                       resultHeaders: response.data.resultHeaderList[key]
                   }
                   this.items.push(data);
+                  this.displayItems = this.items.slice(0,this.pageSize);
+                  this.length = Math.ceil(this.items.length/this.pageSize);
                 }
             })
             .catch      
@@ -109,6 +124,9 @@
            this.$router.push('/result/' + id); 
         return;
       },
+      pageChange (pageNumber){
+        this.displayItems = this.items.slice(this.pageSize*(pageNumber -1), this.pageSize*(pageNumber));
+       },
     },
     components: {
       navBar: NavBar
