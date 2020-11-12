@@ -4,7 +4,7 @@
         <v-row min-height="700" no-gutters>
           <v-col cols="12" >
             <v-card 
-              v-for="(item, index) in items" :key="index" 
+              v-for="(item, index) in displayItems" :key="index" 
             　min-height="250"
               class ="ma-lg-4 ma-md-3 ma-sm-3 ma-3 pa-lg-4 pa-md-4 pa-sm-8 pa-8">
               
@@ -53,6 +53,14 @@
           </v-col>
           </v-row>
         </v-container>
+        <div class="text-center">
+          <v-pagination
+            v-model="page"
+            :length="length"
+            @input = "pageChange"
+            color = "brown"
+          ></v-pagination>
+        </div>
       </div>
 </template>
 <script>
@@ -66,7 +74,11 @@
         inset: false,
         dark: false,
         info: '',
-        items: []
+        page: 1,
+        pageSize: 10,
+        length: 0,
+        items: [],
+        displayItems: []
       }
     },
     filters: {
@@ -83,6 +95,8 @@
                 for (var key in response.data) {
                   this.items.push(response.data[key]);
                 }
+                this.displayItems = this.items.slice(0,this.pageSize);
+                this.length = Math.ceil(this.items.length/this.pageSize);
             })
             .catch      
         },
@@ -94,7 +108,10 @@
       toAnswerPage (id) {
            this.$router.push('/test_answer/' + id); 
         return;
-      }
+      },
+      pageChange (pageNumber){
+        this.displayItems = this.items.slice(this.pageSize*(pageNumber -1), this.pageSize*(pageNumber));
+       },
     },
     components: {
       navBar: NavBar
