@@ -6,12 +6,16 @@ import App from '../app.vue'
 import store from '../store/store'
 import router from '../routes'; 
 import Vuetify from "vuetify";
+
 import "vuetify/dist/vuetify.min.css"; // 追加
 import '@mdi/font/css/materialdesignicons.css'
 
 const vuetifyOptions = { icons: {iconfont: 'mdi', }}
 Vue.use(Vuetify); // 追加
 Vue.use(VueRouter);
+Vue.use(require('vue-moment'));
+
+
 Vue.config.devtools = true;
 
 document.addEventListener('DOMContentLoaded', () => {

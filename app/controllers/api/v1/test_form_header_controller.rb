@@ -8,7 +8,15 @@ class Api::V1::TestFormHeaderController < ApiController
 
   def index
     testFormHeader = User.joins(:test_form_headers).select("test_form_headers.*")
-    render json: testFormHeader
+    testTypeList = User.joins(:test_form_headers).group(:test_type).pluck(:test_type)
+    userIdList = User.joins(:test_form_headers).group("users.id").pluck("users.id")
+    testFormIdList     = User.joins(:test_form_headers).group("test_form_headers.id").pluck("test_form_headers.id")
+    rtnHash = {}
+    rtnHash[:testFormHeader] = testFormHeader
+    rtnHash[:testTypeList] = testTypeList
+    rtnHash[:userIdList] = userIdList
+    rtnHash[:testFormIdList] = testFormIdList
+    render json: rtnHash
   end
 
   def show

@@ -1,4 +1,3 @@
-import Config from '../const/config'
 
 export default {
     data () {
