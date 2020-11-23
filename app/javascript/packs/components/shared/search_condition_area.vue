@@ -17,6 +17,7 @@
             label="Search"
             single-line
             hide-details
+            class ="py-0 px-3"
             @input="statusChange"
         ></v-text-field>
         </v-col>
@@ -41,7 +42,7 @@
             ></v-combobox>
         </v-col>
         <v-col cols="12" sm="4" md="4" lg="4" v-show="filterType == this.getCreatedAtName">
-        <v-text-field v-model="createdTime" single-line>
+        <v-text-field v-model="createdTime" class ="py-0 px-3" single-line>
             <template v-slot:append-outer>
             <date-picker v-model="createdTime" @input="timeChange"/>
             </template>
@@ -73,7 +74,6 @@ import Config from '../../../const/config';
 
 export default {
   props: ['testTypeList','userIdList', 'testFormIdList','pageSize'],
-
 
   data () {
     return {
