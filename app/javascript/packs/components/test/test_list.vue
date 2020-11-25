@@ -1,13 +1,19 @@
 <template>
       <div>
         <v-container fluid>
+        <search-condition-area 
+          :testTypeList="this.testTypeList"
+          :userIdList ="this.userIdList"
+          :testFormIdList ="this.testFormIdList"
+          :pageSize ="this.pageSize"
+          @input="filterChange"
+        ></search-condition-area>
         <v-row min-height="700" no-gutters>
           <v-col cols="12" >
             <v-card 
-              v-for="(item, index) in displayItems" :key="index" 
+              v-for="(item, index) in filterItems" :key="index" 
             　min-height="250"
               class ="ma-lg-4 ma-md-3 ma-sm-3 ma-3 pa-lg-4 pa-md-4 pa-sm-8 pa-8">
-              
               <v-card-title class="headline" v-text="item.header_name"></v-card-title>
               <v-card-subtitle class="pb-0" :text-content.prop="item.test_type | HeaderTestFilter"></v-card-subtitle>
               <v-card-text class="text--primary">
@@ -61,42 +67,50 @@
             color = "brown"
           ></v-pagination>
         </div>
+        <p>{{this.info}}</p>
+        <p>検索；  {{this.search}}</p>
+        <p>displayItems；{{this.displayItems}}</p>
       </div>
 </template>
 <script>
   // axiosを読み込む
   import axios from 'axios';
   import NavBar from '../shared/navbar.vue';
+  import SearchConditionArea from '../shared/search_condition_area.vue';
   import HeaderTestFilter from '../../../filters/headerTestFilter'
+  import searchCondition from '../../../mixIns/searchCondition';
+  import Config from '../../../const/config';
+  
   export default {
+    mixins: [ searchCondition ],
     data() {
       return {
         inset: false,
         dark: false,
         info: '',
-        page: 1,
-        pageSize: 10,
-        length: 0,
-        items: [],
-        displayItems: []
+        pageSize: Config.LIST_PAGE_SIZE,
       }
     },
     filters: {
       HeaderTestFilter,
     },
      mounted: function(){
-            console.log('testlist mounted');
             axios
             .get('http://localhost:3000/api/v1/test_form_header', {
                email: this.email,
             })
             .then(response => {
-              this.info = response.data;
-                for (var key in response.data) {
-                  this.items.push(response.data[key]);
-                }
-                this.displayItems = this.items.slice(0,this.pageSize);
-                this.length = Math.ceil(this.items.length/this.pageSize);
+              this.info = response.data.userIdList;
+              response.data.testFormHeader.map(element => this.items.push(element))
+              response.data.testTypeList.map(element => this.testTypeList.push(element))
+              response.data.userIdList.map(element => this.userIdList.push(element))
+              response.data.testFormIdList.map(element => this.testFormIdList.push(element))
+
+              this.displayItems = this.items.slice(0,this.pageSize);
+              this.length = Math.ceil(this.items.length/this.pageSize);
+              this.keepFilteritems = this.items
+              this.filterType = 'header_name'
+              this.createdTime = this.$moment(this.getToday).format("YYYY-MM-DD")
             })
             .catch      
         },
@@ -109,12 +123,11 @@
            this.$router.push('/test_answer/' + id); 
         return;
       },
-      pageChange (pageNumber){
-        this.displayItems = this.items.slice(this.pageSize*(pageNumber -1), this.pageSize*(pageNumber));
-       },
     },
+  
     components: {
-      navBar: NavBar
+      navBar: NavBar,
+      searchConditionArea: SearchConditionArea
     }
   }
 </script>

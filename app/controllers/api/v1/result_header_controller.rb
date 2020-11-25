@@ -1,6 +1,9 @@
 class Api::V1::ResultHeaderController < ApiController
   before_action :set_tesfForms, only: [:show]
 
+  #検索区分を取得モジュール
+  include SearchComboboxes
+
   # ActiveRecordのレコードが見つからなければ404 not foundを応答する
   rescue_from ActiveRecord::RecordNotFound do |exception|
     render json: { error: '404 not found' }, status: 404
@@ -13,6 +16,7 @@ class Api::V1::ResultHeaderController < ApiController
                                              test_form_headers.test_type,
                                              test_form_headers.question_num,
                                              test_form_headers.version,
+                                             test_form_headers.created_at,
                                              test_result_headers.test_form_header_id,
                                              test_form_headers.test_form_version_operation_id,
                                              count(test_result_headers.id) as count_all")
@@ -24,10 +28,17 @@ class Api::V1::ResultHeaderController < ApiController
       resultHeaders = TestResultHeader.where(test_form_header_id: testFormHeader.test_form_header_id)
       resultHeaderList.push(resultHeaders)
     end
+
+    testTypeList = getTestTypeList()
+    userIdList = getUserIdList()
+    testFormIdList     = getFormIdList()
     
     rtnHash = {}
     rtnHash[:testFormHeaders] = testFormHeaders
     rtnHash[:resultHeaderList] = resultHeaderList
+    rtnHash[:testTypeList] = testTypeList
+    rtnHash[:userIdList] = userIdList
+    rtnHash[:testFormIdList] = testFormIdList
 
     render json: rtnHash
   end

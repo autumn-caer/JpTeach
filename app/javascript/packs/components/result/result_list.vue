@@ -1,9 +1,16 @@
 <template>
   <v-container fluid>
+  <search-condition-area 
+    :testTypeList="this.testTypeList"
+    :userIdList ="this.userIdList"
+    :testFormIdList ="this.testFormIdList"
+    :pageSize ="this.pageSize"
+    @input="filterChange"
+  ></search-condition-area>
   <v-row min-height="700">
     <v-col cols="12" sm="12" md="6" lg="6">
       <v-card 
-        v-for="(item, index) in displayItems" :key="index" 
+        v-for="(item, index) in filterItems" :key="index" 
       　min-height="250"
         class="ma-lg-4 ma-md-3 ma-sm-3 ma-3 pa-lg-4 pa-md-4 pa-sm-8 pa-8">
         <v-card-title class="headline" v-text="item.testFormHeaders.header_name">tes</v-card-title>
@@ -78,8 +85,13 @@
   // axiosを読み込む
   import axios from 'axios';
   import NavBar from '../shared/navbar.vue';
+  import SearchConditionArea from '../shared/search_condition_area.vue';
   import HeaderTestFilter from '../../../filters/headerTestFilter'
+  import searchResultCondition from '../../../mixIns/searchResultCondition';
+  import Config from '../../../const/config';
+  
   export default {
+    mixins: [ searchResultCondition ],
     data() {
       return {
         inset: false,
@@ -88,8 +100,6 @@
         pageSize: 3,
         length: 0,
         info: '',
-        items: [],
-        displayItems: []
       }
     },
     filters: {
@@ -103,14 +113,22 @@
             })
             .then(response => {
               this.info = response.data;
+                response.data.testTypeList.map(element => this.testTypeList.push(element))
+                response.data.userIdList.map(element => this.userIdList.push(element))
+                response.data.testFormIdList.map(element => this.testFormIdList.push(element))
+
                 for (var key in response.data.testFormHeaders) {
                   let data = {
                       testFormHeaders: response.data.testFormHeaders[key],
                       resultHeaders: response.data.resultHeaderList[key]
                   }
+
                   this.items.push(data);
                   this.displayItems = this.items.slice(0,this.pageSize);
                   this.length = Math.ceil(this.items.length/this.pageSize);
+                  this.keepFilteritems = this.items
+                  this.filterType = 'header_name'
+                  this.createdTime = this.$moment(this.getToday).format("YYYY-MM-DD")
                 }
             })
             .catch      
@@ -129,7 +147,8 @@
        },
     },
     components: {
-      navBar: NavBar
+      navBar: NavBar,
+      searchConditionArea: SearchConditionArea
     }
   }
 </script>
