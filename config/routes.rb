@@ -15,6 +15,8 @@ Rails.application.routes.draw do
       resources :test_answer
       resources :result_header
       resources :result
+      resources :user_search, only: [:index, :show]
+      resources :user_page
     end
   #   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
   #     registrations: 'api/auth/registrations'

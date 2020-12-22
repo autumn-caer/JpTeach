@@ -10,7 +10,7 @@ import home from './packs/components/home/home.vue';
 import newForm from './packs/components/test/new_form.vue';
 import resultList from './packs/components/result/result_list.vue';
 import result from './packs/components/result/result.vue';
-
+import userSearch from './packs/components/userFollow/user_search.vue';
 const routes = [
      { path: '/', name: 'SignIn', component: SignIn } ,
      { path: '/login', name: 'LogIn', component: LogIn},
@@ -23,6 +23,7 @@ const routes = [
      { path: '/newform', name: 'newForm', component: newForm},
      { path: '/resultlist', name: 'resultList', component: resultList},
      { path: '/result/:id', name: 'result', component: result},
+     { path: '/user_search/', name: 'userSearch', component: userSearch},
   ];
 
 export default new VueRouter({ mode: 'history', routes });
