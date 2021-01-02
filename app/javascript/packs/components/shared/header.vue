@@ -90,7 +90,7 @@ export default {
   data: function () {
     return {
       items: [
-        'userpage', 'login','listview','home','testlist','newform','resultlist','user_search'
+        'userpage', 'login','listview','home','testlist','newform','resultlist','user_search', 'user_edit'
       ],
       drawer: null,
       showSearchInput: false,
@@ -154,6 +154,11 @@ export default {
         return;
       }
       if (pathUrl == 'user_search') {
+        //新規作成に移動
+        this.$router.push('/' + pathUrl); 
+        return;
+      }
+      if (pathUrl == 'user_edit') {
         //新規作成に移動
         this.$router.push('/' + pathUrl); 
         return;

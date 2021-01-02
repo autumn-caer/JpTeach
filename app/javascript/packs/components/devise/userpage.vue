@@ -7,7 +7,7 @@
             <div class="widgetBody widget-body">
               <div class="widget-top-overflow text-white">
                 <div class="height-250 overflow-hidden">
-                  <img src="../../../../assets/images/dam.jpg" class="img-fluid" alt="test"/>
+                  <img :src="this.image" class="img-fluid" alt="test"/>
                 </div>
                   <a class="btn btn-outline btn-sm mb-2"><v-icon class="fa fa-twitter mr-2">mdi-magnify</v-icon></a>
                   <v-row>
@@ -17,11 +17,15 @@
                           <img src="../../../../assets/images/dam.jpg" alt="test" class="profileAvatar rounded-circle"/>
                         </span> -->
                         <v-avatar size="100px">
-                          <img alt="Avatar" src="../../../../assets/images/dam.jpg">
+                          <img alt="Avatar" :src="this.image">
                         </v-avatar>
                         <h5 class="fw-normal text-black">{{getUserName}}<span class="fw-semi-bold"></span></h5>
                         <p class="text-black">UI/UX designer</p>
-                        <a href="#" class="btn btn-success btn-sm mb-3">Send</a>
+                        <!-- <a href="#" type="button" class="btn btn-success btn-sm mb-3" @click="follow">Send</a> -->
+                        <v-btn
+                            class="btn btn-success btn-sm mb-3"
+                            @click="follow"
+                        >Send</v-btn>
                         <div>
                           <ul class="profileContacts mt-sm">
                             <li><i class="fa fa-lg fa-phone fa-fw mr-2"></i><a>+375 29 555-55-55</a></li>
@@ -50,8 +54,9 @@
                         <p class="badge badge-info rounded-0">UI/UX</p>
                         <p class="badge badge-primary rounded-0 ml-2"> Web Design</p>
                         <p class="badge badge-default rounded-0 ml-2"> Mobile Apps</p>
-                        <v-chip :color="`green lighten-4`" class="ml-0 mr-2 black--text" label small>test apps</v-chip>
-                      </div>
+                        <!-- <v-chip :color="`green lighten-4`" class="ml-0 mr-2 black--text" label small>test apps</v-chip> -->
+                        <v-btn class="btn btn-success btn-sm mb-3" @click="follow">{{followLabel}}</v-btn>
+                      </div> 
                       <p class="lead mt-xlg">My name is Adam Johns and here is my new Sing user profile page.</p>
                       <p class="text-muted">
                         I love reading people's summaries page especially
@@ -63,6 +68,69 @@
               </div>
             </div>
           </section>
+          <v-card
+            class ="pa-lg-8 pa-md-8 pa-sm-8 pa-8"
+            min-height="600"
+            >
+            <v-form>
+              <v-row>
+                <v-col lg="4" md="4" sm="12" cols="12">
+                   <v-btn
+                    block
+                    color="warning"
+                    @click="toTestListPage"
+                    >
+                    テストListページ
+                  </v-btn>
+                </v-col>
+                <v-col lg="4" md="4" sm="12" cols="12">
+                   <v-btn
+                    block
+                    color="warning"
+                    @click="backToRoot"
+                    >
+                    Back to URL
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-form>
+            <h3 class="headline">Latest Activities</h3>
+            <v-list three-line>
+              <v-list-item
+                v-for="(item, i) in acitiveItems"
+                :key="i"
+                ripple
+                @click="alertList(item.id)"
+              >
+                <!-- <v-icon large color="green darken-2" class="mb-12 mr-6">mdi-radiobox-blank</v-icon> -->
+
+                <v-chip class="mb-12 mr-6" color="primary"
+                  ><v-icon>mdi-checkbox-marked-circle</v-icon>{{ $moment(item.dateTime).format("YYYY/MM/DD") }}
+                </v-chip>
+                <v-list-item-content>
+                  <span
+                    class="text-uppercase font-weight-regular caption">{{item.category | HeaderTestFilter}}</span>
+                  <div v-text="item.title"></div>
+                  <div>{{ $moment(item.dateTime).format("YYYY/MM/DD") }}</div>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+        
+                          <v-btn icon>
+                            <v-icon @click="alertIcon()">mdi-heart</v-icon>
+                          </v-btn>
+          
+                          <v-btn icon>
+                            <v-icon @click="alertIcon()">mdi-bookmark</v-icon>
+                          </v-btn>
+          
+                          <v-btn icon>
+                            <v-icon @click="alertIcon()">mdi-share-variant</v-icon>
+                          </v-btn>
+                        </v-card-actions>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card>
         </v-col> 
         <v-col lg="6" md="6" sm="12" cols="12">
           <section class="activities">
@@ -147,72 +215,15 @@
             </section>
           </section>
         </v-col>
-        <v-col lg="6" md="6" sm="12" cols="12" class="pa-md-0">
-          <v-card
-            class ="pa-lg-8 pa-md-8 pa-sm-8 pa-8"
-            min-height="600"
-            >
-            <v-card :elevation="0" color="amber lighten-5">
-              <v-card-title class="headline">Profile</v-card-title>
-              <v-card-subtitle title>Listen to your favorite artists and albums whenever and wherever, online and offline.</v-card-subtitle>
-              <v-card-text class="text--primary">
-                <div>{{getUserId}}</div>
-                <div>{{getUserName}}</div>
-                <div>{{getEmail}}</div>
-              </v-card-text>
-             </v-card>
-             <v-divider
-                class="md-6"
-                vertical
-              ></v-divider>
-            <v-card :elevation="0" color="amber lighten-5">
-              <v-card-title class="headline">Test Page</v-card-title>
-              <v-card-subtitle>Listen to your favorite artists and albums whenever and wherever, online and offline.</v-card-subtitle>
-            </v-card>
-             <v-divider
-                class="md-6"
-                vertical
-              ></v-divider>
-            <v-card :elevation="0" color="amber lighten-5">
-              <v-card-title class="headline">JpTech Sign Up</v-card-title>
-              <v-card-subtitle>Listen to your favorite artists and albums whenever and wherever, online and offline.</v-card-subtitle>
-            </v-card>
-             <v-divider
-                class="md-6"
-                vertical
-              ></v-divider>
-            <v-form>
-              <v-row>
-                <v-col lg="4" md="4" sm="12" cols="12">
-                   <v-btn
-                    block
-                    color="warning"
-                    @click="backToRoot"
-                    >
-                    Back to URL
-                  </v-btn>
-                </v-col>
-                <v-col lg="4" md="4" sm="12" cols="12">
-                   <v-btn
-                    block
-                    color="warning"
-                    @click="backToRoot"
-                    >
-                    Back to URL
-                  </v-btn>
-                </v-col>
-              </v-row>
-           </v-form>
-          </v-card>
-        </v-col>
       </v-row>
-      <p>{{this.info}}</p>
+      <p>here{{this.info}}</p>
     </v-container>
 </template>
 <script>
  // axiosを読み込む
   import axios from 'axios';
   import { mapGetters } from 'vuex';
+  import HeaderTestFilter from '../../../filters/headerTestFilter'
 
 export default {
   data: function () {
@@ -222,30 +233,67 @@ export default {
       items: [
         'web', 'shopping', 'videos', 'images', 'news',
       ],
+      acitiveItems: [],
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-      info: '',
-      testHeaderSize: 0
+      info: null,
+      testHeaderSize: 0,
+      image: '',
+      followLabel: 'test_follow'
     }
+  },
+  filters: {
+      HeaderTestFilter,
   },
 
    mounted: function(){
-            console.log('mounted');
-            axios
-            .get('http://localhost:3000/api/v1/user_page/' , {
-              headers: { "Content-Type": "application/json" },
-               email: this.email,
+    let id = this.$route.params.id
+    if (id) {
+      axios
+      .get('http://localhost:3000/api/v1/user_page/' + id , {
+        headers: { "Content-Type": "application/json" },      
+        params: { followed_id: id, follower_id: id},
+      })
+      .then(response => {
+        this.info = response.data
+        this.image = response.data.user.image
+        if (response.data.realationship) {
+          this.followLabel = 'unfollow'
+        } else {
+          this.followLabel = 'follow'
+        }
+        response.data.activeItems.map(element => {
               
-            })
-            .then(response => {
-       
-              this.info = response.data;
-              this.testHeaderSize = response.data.testFormHeader.length
-              for (var key in response.data.testForms) {
-                  this.items.push(response.data.testForms[key]);
-              }
+              let item = {
+                id: element.id,
+                image: 'http://localhost:3000/api/v1/user_photo/' + element.user_id,
+                title: element.header_name,
+                category: element.test_type,
+                keyword: element.question_num,
+                dateTime: element.updated_at,
+              };
+              
+              this.acitiveItems.push(item)})
+      })
+      .catch      
 
-            })
-            .catch      
+    } else {
+      console.log('mounted');
+      axios
+      .get('http://localhost:3000/api/v1/user_page/' , {
+        headers: { "Content-Type": "application/json" },
+          email: this.email,
+      })
+      .then(response => {
+        this.info = response.data
+        this.image = response.data.user.image
+        if (response.data.realationship) {
+          this.followLabel = 'unfollow'
+        } else {
+          this.followLabel = 'follow'
+        }
+      })
+      .catch      
+    }
   },
   computed: {
     ...mapGetters([
@@ -259,6 +307,51 @@ export default {
   methods: {
       backToRoot () {
           this.$router.push('/');
+      },
+      toTestListPage () {
+        this.$router.push('/testlist');
+      },
+      alertList(id) {
+        this.$router.push('/test_answer/' + id); 
+        return;
+      },
+      alertIcon() {
+        alert('Icon')
+        return false;
+      },
+      follow() {
+        if (this.followLabel == 'follow') {
+            axios
+            .post('http://localhost:3000/api/v1/user_follow/' , {
+              headers: { "Content-Type": "application/json" },
+               email: this.email,
+               
+            })
+            .then(response => {
+              this.info = response.data
+              if (response.data.realationship) {
+                this.followLabel = 'unfollow'
+              } else {
+                this.followLabel = 'follow'
+              }
+            })
+            .catch   
+        } else {
+            axios
+            .delete('http://localhost:3000/api/v1/user_follow/1' , {
+              headers: { "Content-Type": "application/json" },
+               email: this.email,
+            })
+            .then(response => {
+              this.info = response.data
+              if (response.data.realationship) {
+                this.followLabel = 'unfollow'
+              } else {
+                this.followLabel = 'follow'
+              }
+            })
+            .catch  
+        }
       }
   }
 }

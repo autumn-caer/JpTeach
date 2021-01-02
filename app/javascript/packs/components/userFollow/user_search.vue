@@ -38,7 +38,7 @@
             v-for="(item, i) in searching"
             :key="i"
             ripple
-            @click="() => {}"
+            @click="toUserProfile(item.id)"
           >
             <v-img
               :src="item.image"
@@ -78,7 +78,7 @@
          <p>right</p>
       </v-col>
     </v-row>
-    <p> info  : {{this.info}}</p>
+    <p> items  : {{this.items}}</p>
   </v-container>
 </template>
 <script>
@@ -124,7 +124,6 @@
       ],
       search: '',
     }),
-
     computed: {
       keywords () {
         if (!this.search) return []
@@ -139,7 +138,6 @@
       },
       searching () {
         if (!this.search) return this.items
-
         const search = this.search.toLowerCase()
 
         return this.items.filter(item => {
@@ -159,7 +157,8 @@
             response.data.users.map(element => {
               
               let item = {
-                image: 'https://cdn-images-1.medium.com/max/1024/1*eogFpsVgNzXQLCVgFzT_-A.jpeg',
+                id: element.id,
+                image: 'http://localhost:3000/api/v1/user_photo/' + element.id,
                 title: element.name,
                 category: element.name,
                 keyword: element.name,
@@ -171,6 +170,9 @@
           .catch      
       },
     methods: {
+      toUserProfile (id) {
+          this.$router.push('/userpage/' + id);
+      }
 
     },
   }
