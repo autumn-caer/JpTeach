@@ -1,4 +1,3 @@
-import DatePicker from '../packs/components/shared/date_picker.vue';
 import Config from '../const/config'
 
 export default {
@@ -73,10 +72,10 @@ export default {
     
   computed: {
     getToday() {
-     return this.$moment().format("YYYY/MM/DD")
+     return this.$moment().format("YYYY-MM-DD")
    },
    getCreateAt() {
-     return this.$moment(this.createdTime).format("YYYY/MM/DD")
+     return this.$moment(this.createdTime).format("YYYY-MM-DD")
    },
 
    filterItems() {
@@ -105,11 +104,11 @@ export default {
           break;
         case Config.CREATED_AT.name:
           if (this.createdTimeType == Config.SAME_DAY.name)   {
-            tmpList = this.items.filter(item => this.isSame(this.$moment(item.created_at).format("YYYY/MM/DD"), this.getCreateAt));
+            tmpList = this.items.filter(item => this.isSame(this.$moment(item.created_at).format("YYYY-MM-DD"), this.getCreateAt));
           } else if(this.createdTimeType == Config.BEFORE_DAY.name) {
-            tmpList = this.items.filter(item => this.isBefore(this.$moment(item.created_at).format("YYYY/MM/DD"), this.getCreateAt));
+            tmpList = this.items.filter(item => this.isBefore(this.$moment(item.created_at).format("YYYY-MM-DD"), this.getCreateAt));
           } else {
-            tmpList = this.items.filter(item => this.isAfter(this.$moment(item.created_at).format("YYYY/MM/DD"), this.getCreateAt));
+            tmpList = this.items.filter(item => this.isAfter(this.$moment(item.created_at).format("YYYY-MM-DD"), this.getCreateAt));
           }
           break;
         case Config.ID.name:
@@ -129,7 +128,5 @@ export default {
      return this.displayItems
    },
  },
-    components: {
-      datePicker: DatePicker
-    }
+  
 }

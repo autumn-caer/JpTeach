@@ -103,7 +103,6 @@
                 @click="alertList(item.id)"
               >
                 <!-- <v-icon large color="green darken-2" class="mb-12 mr-6">mdi-radiobox-blank</v-icon> -->
-
                 <v-chip class="mb-12 mr-6" color="primary"
                   ><v-icon>mdi-checkbox-marked-circle</v-icon>{{ $moment(item.dateTime).format("YYYY/MM/DD") }}
                 </v-chip>

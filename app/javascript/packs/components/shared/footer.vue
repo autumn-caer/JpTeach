@@ -1,7 +1,7 @@
 <template>
     <v-footer
-      color="primary lighten-1"
-      padless
+      color="primary lighten-1" inset
+      class="floating"
     >
       <v-row
         justify="center"
@@ -36,13 +36,16 @@ export default {
       'Team',
       'Services',
       'Blog',
-      ]
+      ],
+      selected: 1
     }
   },
 
 }
 </script>
 <style scoped>
-
+.floating {
+  z-index: 4;
+}
 
 </style>

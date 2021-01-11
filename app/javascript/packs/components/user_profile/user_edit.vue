@@ -2,9 +2,6 @@
 <div>
     <v-container fluid>
       <v-row justify="center">
-      <v-col lg="3" md="3" sm="3" cols="12" style="background-color:white;">
-        <p>left</p>
-      </v-col>
       <v-col lg="5" md="5" sm="5" cols="12"
               class="">
         <v-card

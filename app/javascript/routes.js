@@ -12,6 +12,7 @@ import resultList from './packs/components/result/result_list.vue';
 import result from './packs/components/result/result.vue';
 import userSearch from './packs/components/userFollow/user_search.vue';
 import userEdit from './packs/components/user_profile/user_edit.vue';
+import testDate from './packs/components/shared/testDate.vue';
 const routes = [
      { path: '/', name: 'SignIn', component: SignIn } ,
      { path: '/login', name: 'LogIn', component: LogIn},
@@ -27,6 +28,7 @@ const routes = [
      { path: '/user_search/', name: 'userSearch', component: userSearch},
      { path: '/user_edit/', name: 'userEdit', component: userEdit},
      { path: '/userpage/:id', name: 'userSearch', component: userPage},
+     { path: '/testDate', name: 'testDate', component: testDate},
   ];
 
 export default new VueRouter({ mode: 'history', routes });

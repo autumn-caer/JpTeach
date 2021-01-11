@@ -75,7 +75,6 @@
 <script>
   // axiosを読み込む
   import axios from 'axios';
-  import NavBar from '../shared/navbar.vue';
   import SearchConditionArea from '../shared/search_condition_area.vue';
   import HeaderTestFilter from '../../../filters/headerTestFilter'
   import searchCondition from '../../../mixIns/searchCondition';
@@ -126,7 +125,6 @@
     },
   
     components: {
-      navBar: NavBar,
       searchConditionArea: SearchConditionArea
     }
   }

@@ -13,7 +13,7 @@ export default {
   props: {
     value: {
       type: String,
-      default: new Date().toISOString().substr(0, 10)
+       default: new Date().toISOString().substr(0, 10)
     }
   },
   data() {

@@ -71,6 +71,7 @@
 </template>
 <script>
 import Config from '../../../const/config';
+import DatePicker from './date_picker.vue';
 
 export default {
   props: ['testTypeList','userIdList', 'testFormIdList','pageSize'],
@@ -78,10 +79,11 @@ export default {
   data () {
     return {
       filterType: Config.HEADER_NAME.name,
-      createdTime: this.$moment().format("YYYY/MM/DD"),
+      createdTime: this.$moment().format("YYYY-MM-DD"),
       createdTimeType: Config.SAME_DAY.name,
       comboBoxes: Config.filterTypes,
-      dateCondtionList: Config.dateCondtionList
+      dateCondtionList: Config.dateCondtionList,
+      value: null
     }
   },
   methods: {
@@ -112,5 +114,8 @@ export default {
         return Config.ID.name
     },
   },
+  components: {
+      datePicker: DatePicker
+  }
 }
 </script>

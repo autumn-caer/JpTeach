@@ -1,9 +1,10 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col lg="3" md="3" sm="3" cols="12" style="background-color:white;">
+      <!-- <v-col lg="3" md="3" sm="3" cols="12" style="background-color:white;">
         <p>left</p>
-      </v-col>
+        <leftBar absolute></leftBar>
+      </v-col> -->
       <v-col lg="5" md="5" sm="5" cols="12">
         <v-card
           min-height="700"
@@ -84,6 +85,7 @@
 <script>
   // axiosを読み込む
   import axios from 'axios';
+  import LeftBar from '../shared/leftBar.vue';
   import Config from '../../../const/config';
   
   export default {
@@ -175,5 +177,8 @@
       }
 
     },
+    components: {
+      leftBar: LeftBar
+    }
   }
 </script>
