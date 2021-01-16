@@ -134,82 +134,24 @@
         <v-col lg="6" md="6" sm="12" cols="12">
           <section class="activities">
             <h2>Activities_test_change</h2>
-            <section class="event">
+              <section 
+                v-for="(item, i) in notifications"
+                :key="i"
+                ripple
+                class="event">
               <header>
                 <v-list-item-avatar size="54px" style="display:inline-block;">
-                  <img alt="Avatar" src="../../../../assets/images/dam.jpg">
+                  <img :src="item.image" alt="Avatar" >
                 </v-list-item-avatar>
                 <v-list-item-content style="display: inline-flex;">
                 <v-list-item-title>
-                    <a>Bob Nilson</a>
-                    <small><a>@nils</a></small>
+                    <a>{{item.nickname}}</a>
                   </v-list-item-title>
-                  <v-list-item-title class="eventTimestamp">February 22, 2014 at 01:59 PM</v-list-item-title>
+                  <v-list-item-title class="eventTimestamp">{{item.created_at}}</v-list-item-title>
                 </v-list-item-content>
               </header>
                 <div>
-                  There is no such thing as maturity. There is instead an ever-evolving process of maturing. Because when there is a maturity, there is ..
-                </div>
-                <v-row
-                  align="center"
-                  justify="start"
-                  class="eventFooter"
-                >
-                  <v-icon class="mr-1">
-                    mdi-heart
-                  </v-icon>
-                  <span class="subheading mr-2">256</span>
-                  <span class="mr-1">·</span>
-                  <v-icon class="mr-1">
-                    mdi-share-variant
-                  </v-icon>
-                  <span class="subheading">45</span>
-                </v-row>
-            </section>
-          </section>
-          <section class="activities">
-            <section class="event">
-              <header>
-                <v-list-item-avatar size="54px" style="display:inline-block;">
-                  <img alt="Avatar" src="../../../../assets/images/dam.jpg">
-                </v-list-item-avatar>
-                <v-list-item-content style="display: inline-flex;">
-                <v-list-item-title>
-                    <a>Jessica Smith</a>
-                    <small><a>@jess</a></small>
-                  </v-list-item-title>
-                  <v-list-item-title class="eventTimestamp">February 22, 2014 at 01:59 PM</v-list-item-title>
-                </v-list-item-content>
-              </header>
-                <div>
-                  Check out this awesome photo I made in Italy last summer. Seems it was lost somewhere deep inside my brand new HDD 40TB. Thanks god I found it!
-                </div>
-                <v-row
-                  align="center"
-                  justify="start"
-                  class="eventFooter"
-                >
-                  <v-icon class="mr-1">
-                    mdi-heart
-                  </v-icon>
-                  <span class="subheading mr-2">256</span>
-                  <span class="mr-1">·</span>
-                  <v-icon class="mr-1">
-                    mdi-share-variant
-                  </v-icon>
-                  <span class="subheading">45</span>
-                </v-row>
-                <v-list-item-content style="display: inline-flex;">
-                  <v-list-item-title >
-                    <a>Ignacio Abad </a>
-                  </v-list-item-title>
-                  <v-list-item-title>Hey, have you heard anything about that?</v-list-item-title>
-                </v-list-item-content>
-                <div>
-                  <v-list-item-avatar size="54px" style="display:inline-block;">
-                    <img alt="Avatar" src="../../../../assets/images/dam.jpg">
-                  </v-list-item-avatar>
-                 <div class="comment-body" style="display: inline-flex;"><input type="text" placeholder="Write your comment..." class="form-control form-control-sm form-control"/></div>
+                  {{item.message}}
                 </div>
             </section>
           </section>
@@ -233,6 +175,7 @@ export default {
         'web', 'shopping', 'videos', 'images', 'news',
       ],
       acitiveItems: [],
+      notifications: [],
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       info: null,
       testHeaderSize: 0,
@@ -254,12 +197,24 @@ export default {
       })
       .then(response => {
         this.info = response.data
-        this.image = response.data.user.image
+        this.image = 'http://localhost:3000/api/v1/user_photo/' + response.data.user.id
         if (response.data.realationship) {
           this.followLabel = 'unfollow'
         } else {
           this.followLabel = 'follow'
         }
+        
+        response.data.notifications.map(element => {
+          let item = {
+            image: 'http://localhost:3000/api/v1/user_photo/' + element.user_id,
+            user_id: element.user_id,
+            message: element.message,
+            nickname: element.nickname,
+            created_at: element.created_at
+          }
+          this.notifications.push(item)
+        })
+
         response.data.activeItems.map(element => {
               
               let item = {
@@ -271,7 +226,11 @@ export default {
                 dateTime: element.updated_at,
               };
               
-              this.acitiveItems.push(item)})
+              this.acitiveItems.push(item)
+              
+              
+              
+              })
       })
       .catch      
 

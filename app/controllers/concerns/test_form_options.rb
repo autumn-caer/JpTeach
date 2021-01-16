@@ -1,7 +1,7 @@
 module TestFormOptions extend ActiveSupport::Concern
     included do
         def headerTestForm_param
-            params.require(:test_form_header).permit(:header_name,:question_num,:user_id,:test_type,:test_form_version_operation_id,:version)
+            params.require(:test_form_header).permit(:header_name,:question_num,:user_id,:test_type,:test_form_version_operation_id,:version, :open_type)
         end
 
         def set_tesfForms

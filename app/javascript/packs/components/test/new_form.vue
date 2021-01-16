@@ -38,6 +38,9 @@
                <v-radio-group v-model="testType" row>
                 <v-radio v-for="(testType,idx) in headerTestTypes" :value="testType.id" :key="idx" :label="testType.value"></v-radio>
                </v-radio-group>
+               <v-radio-group v-model="openType" row>
+                <v-radio v-for="(openType,idx) in openTypes" :value="openType.id" :key="idx" :label="openType.value"></v-radio>
+               </v-radio-group>
                 <v-divider :inset="inset" :dark="dark" class ="md-6"></v-divider>
                 <div v-for="(item, index) in currntItems" :key="index" class="form">
                   <v-textarea
@@ -111,11 +114,12 @@
   import axios from 'axios';
   import NavBar from '../shared/navbar.vue';
   import headerTestTypes from '../../../mixIns/headerTestTypeList'
+  import openTypes from '../../../mixIns/openTypes'
   import Config from '../../../const/config'
   import { mapGetters } from 'vuex';
   
   export default {
-    mixins: [ headerTestTypes ],
+    mixins: [ headerTestTypes, openTypes ],
     data() {
       return {
         inset: false,
@@ -135,6 +139,7 @@
            },
         ],
         testType:'',
+        openType: ''
       }
     },
      mounted: function(){
@@ -209,7 +214,8 @@
           test_type: this.testType,
           header_name: this.header_name,
           question_num: this.items.length,
-          version: this.version
+          version: this.version,
+          open_type: this.openType
         }
         
         var params = [];

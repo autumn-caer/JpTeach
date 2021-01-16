@@ -21,7 +21,15 @@ const ID          = {"kbn": "4", "name" : "id"}
 const SAME_DAY    = {"kbn": "0", "name" : "日付指定"}
 const BEFORE_DAY  = {"kbn": "1", "name" : "日付以前"}
 const AFTER_DAY   = {"kbn": "2", "name" : "日付以後"}
+const PUBLIC      = {"id": "0", "value" : "公表"}
+const FOLLOWER_ONLY      = {"id": "1", "value" : "フォロワーのみ"}
+const PRIVATE      = {"id": "2", "value" : "自身のみ"}
 
+const openTypes = [
+    PUBLIC,
+    FOLLOWER_ONLY,
+    PRIVATE
+]
 const filterTypes = [
     HEADER_NAME.name,
     TEST_TYPE.name,
@@ -36,9 +44,11 @@ dateCondtionList = [
     AFTER_DAY.name
 ]
 
+
 export default {
     headerTestTypes: headerTestTypes,
     filterTypes: filterTypes,
+    openTypes: openTypes,
     dateCondtionList: dateCondtionList,
     MODE_ANSWER: MODE_ANSWER,
     MODE_CHECK: MODE_CHECK,

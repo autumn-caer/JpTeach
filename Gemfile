@@ -58,3 +58,6 @@ gem 'hirb'
 gem 'devise'
 gem 'devise_token_auth'
 gem 'byebug'
+gem 'active_record_union'
+
+
