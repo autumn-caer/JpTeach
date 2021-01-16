@@ -10,10 +10,22 @@ class Api::V1::TestFormHeaderController < ApiController
   end
 
   def index
-    testFormHeader = User.joins(:test_form_headers).select("test_form_headers.*")
+    #自分をfollowしているidリスト
+    followerIdList = getFollwerIdList(1)
+  
+    #自身のテストを全て取得取得する
+    #follwerのテスト_open_type: フォロワーOnlyとpublicを取得する
+    testFormHeader = User.joins(:test_form_headers).where(test_form_headers: {user_id: 1}).select("test_form_headers.*")\
+                          .union(User.joins(:test_form_headers)\
+                          .where(test_form_headers: {user_id: followerIdList, open_type: [CONSTANTS::OPENTYPE::PUBLIC,CONSTANTS::OPENTYPE::FOLLOWER_ONLY]})\
+                          .select("test_form_headers.*"))
+    
     testTypeList = getTestTypeList()
-    userIdList = getUserIdList()
     testFormIdList     = getFormIdList()
+    userIdList = getUserIdList(1)
+    
+    userIdList << followerIdList
+
     rtnHash = {}
     rtnHash[:testFormHeader] = testFormHeader
     rtnHash[:testTypeList] = testTypeList

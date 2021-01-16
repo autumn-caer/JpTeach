@@ -69,7 +69,6 @@
             color = "brown"
           ></v-pagination>
       </div>
-
     </v-col>
     <v-col cols="12" sm="12" md="6" lg="6">
       <v-card 

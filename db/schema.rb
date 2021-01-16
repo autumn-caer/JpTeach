@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_17_231116) do
+ActiveRecord::Schema.define(version: 2021_01_11_053522) do
 
   create_table "employees", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
@@ -24,6 +24,16 @@ ActiveRecord::Schema.define(version: 2020_10_17_231116) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "relationships", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "follower_id"
+    t.bigint "followed_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["followed_id"], name: "index_relationships_on_followed_id"
+    t.index ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true
+    t.index ["follower_id"], name: "index_relationships_on_follower_id"
+  end
+
   create_table "test_form_headers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "header_name"
     t.string "test_type"
@@ -33,6 +43,7 @@ ActiveRecord::Schema.define(version: 2020_10_17_231116) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "version", default: 0
     t.bigint "test_form_version_operation_id"
+    t.integer "open_type", default: 0
     t.index ["test_form_version_operation_id"], name: "index_test_form_headers_on_test_form_version_operation_id"
     t.index ["user_id"], name: "index_test_form_headers_on_user_id"
   end
@@ -102,17 +113,20 @@ ActiveRecord::Schema.define(version: 2020_10_17_231116) do
     t.string "last_sign_in_ip"
     t.string "name"
     t.string "nickname"
-    t.string "image"
+    t.binary "image", size: :medium
     t.string "email"
     t.text "tokens"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "extention", default: "jpeg"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "relationships", "users", column: "followed_id"
+  add_foreign_key "relationships", "users", column: "follower_id"
   add_foreign_key "test_form_headers", "test_form_version_operations"
   add_foreign_key "test_form_headers", "users"
   add_foreign_key "test_form_options", "test_forms"

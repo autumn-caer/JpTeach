@@ -12,6 +12,7 @@
 import AppHeader from './packs/components/shared/header.vue';
 import AppFooter from './packs/components/shared/footer.vue';
 import SignIn from './packs/components/devise/sign_in.vue';
+import LeftBar from './packs/components/shared/leftBar.vue';
 
 export default {
   data: function () {
@@ -21,7 +22,8 @@ export default {
   },
   components: {
     appHeader: AppHeader,
-    appFooter: AppFooter
+    appFooter: AppFooter,
+    leftBar: LeftBar
   }
 }
 </script>
@@ -30,5 +32,9 @@ export default {
 p {
   font-size: 2em;
   text-align: center;
+}
+.fixed01{
+  position: fixed;
+  top: 20;
 }
 </style>

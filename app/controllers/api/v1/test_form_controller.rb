@@ -45,14 +45,13 @@ class Api::V1::TestFormController < ApiController
     #version管理レコードを作成
     test_form_version_operation_id = params["test_form_version_operation_id"]
 
-    byebug
     testFormVersionOperation = nil
-    if test_form_version_operation_id.nil?
+    if test_form_version_operation_id.blank?
       testFormVersionOperation = TestFormVersionOperation.new()
     else
       testFormVersionOperation = TestFormVersionOperation.find(test_form_version_operation_id)
     end
-
+    byebug
     tesfFormHeader = testFormVersionOperation.test_form_header.build(headerTestForm_param)
     testForms = []
     testFormOptions = []

@@ -59,6 +59,10 @@
                <v-radio-group v-model="test_type" row>
                 <v-radio v-for="(testType,idx) in headerTestTypes" :value="testType.id" :key="idx" :label="testType.value"></v-radio>
                </v-radio-group>
+               <v-text-field v-model="open_type" label="open_type"></v-text-field>
+               <v-radio-group v-model="open_type" row>
+                <v-radio v-for="(openType,idx) in openTypes" :value="openType.id" :key="idx" :label="openType.value"></v-radio>
+               </v-radio-group>
                 <v-divider :inset="inset" :dark="dark" class ="md-6"></v-divider>
                 <div v-for="(item, index) in items" :key="index" class="form">
                   <v-textarea
@@ -113,8 +117,9 @@
   import TestRadio from './parts/test_radio.vue';
   import Config from '../../../const/config';
   import headerTestTypes from '../../../mixIns/headerTestTypeList';
+  import openTypes from '../../../mixIns/openTypes'
   export default {
-    mixins: [ headerTestTypes ],
+    mixins: [ headerTestTypes, openTypes ],
     data() {
       return {
         inset: false,
@@ -126,6 +131,7 @@
         rows: Config.TEST_TEXT_ROWS,
         header_name: '',
         test_type: '',
+        open_type: '',
         test_form_header_id: '',
         items: [],
         justify: [
@@ -151,6 +157,7 @@
               this.message = response.data.message
               this.header_name = response.data.testFormHeader.header_name
               this.test_type = response.data.testFormHeader.test_type
+              this.open_type = String(response.data.testFormHeader.open_type)
               this.test_form_header_id = response.data.testFormHeader.id
 
               for (var key in response.data.testForms) {
@@ -174,7 +181,8 @@
           user_id: userId,
           test_type: this.testType,
           header_name: this.header_name,
-          question_num: this.items.length
+          question_num: this.items.length,
+          open_type: this.openType
         }
         
         let params = [];

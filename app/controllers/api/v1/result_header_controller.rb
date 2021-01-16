@@ -10,8 +10,9 @@ class Api::V1::ResultHeaderController < ApiController
   end
 
   def index
+    userId = 1;
     testFormHeaders = TestResultHeader.joins(:test_form_header) \
-                                    .where(user_id: '1') \
+                                    .where(user_id: userId) \
                                     .select("test_form_headers.header_name,
                                              test_form_headers.test_type,
                                              test_form_headers.question_num,
@@ -30,9 +31,11 @@ class Api::V1::ResultHeaderController < ApiController
     end
 
     testTypeList = getTestTypeList()
-    userIdList = getUserIdList()
     testFormIdList     = getFormIdList()
-    
+    userIdList = getUserIdList(userId)
+    followerIdList = getFollwerIdList(userId)
+    userIdList << followerIdList
+
     rtnHash = {}
     rtnHash[:testFormHeaders] = testFormHeaders
     rtnHash[:resultHeaderList] = resultHeaderList
