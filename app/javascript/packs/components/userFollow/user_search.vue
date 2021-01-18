@@ -1,11 +1,7 @@
 <template>
   <v-container fluid>
     <v-row>
-      <!-- <v-col lg="3" md="3" sm="3" cols="12" style="background-color:white;">
-        <p>left</p>
-        <leftBar absolute></leftBar>
-      </v-col> -->
-      <v-col lg="5" md="5" sm="5" cols="12">
+      <v-col lg="7" md="7" sm="7" cols="12">
         <v-card
           min-height="700"
           class=""
@@ -75,8 +71,9 @@
         </v-list>
       </v-card>
       </v-col>
-       <v-col lg="4" md="4" sm="4" cols="12" style="background-color:white;">
+       <v-col lg="4" md="4" sm="4" cols="12">
          <p>right</p>
+         <notifications-tag :notifications ="this.notifications"></notifications-tag>
       </v-col>
     </v-row>
     <p> items  : {{this.items}}</p>
@@ -87,9 +84,10 @@
   import axios from 'axios';
   import LeftBar from '../shared/leftBar.vue';
   import Config from '../../../const/config';
-  
+  import notificationsJs from '../../../mixIns/notifications';
+
   export default {
-    
+    mixins: [ notificationsJs ],
     data: () => ({
       info: '',
       items: [
@@ -156,6 +154,8 @@
           })
           .then(response => {
             this.info = response.data;
+            this.setNotifications(response)
+
             response.data.users.map(element => {
               
               let item = {

@@ -132,41 +132,23 @@
           </v-card>
         </v-col> 
         <v-col lg="6" md="6" sm="12" cols="12">
-          <section class="activities">
-            <h2>Activities_test_change</h2>
-              <section 
-                v-for="(item, i) in notifications"
-                :key="i"
-                ripple
-                class="event">
-              <header>
-                <v-list-item-avatar size="54px" style="display:inline-block;">
-                  <img :src="item.image" alt="Avatar" >
-                </v-list-item-avatar>
-                <v-list-item-content style="display: inline-flex;">
-                <v-list-item-title>
-                    <a>{{item.nickname}}</a>
-                  </v-list-item-title>
-                  <v-list-item-title class="eventTimestamp">{{item.created_at}}</v-list-item-title>
-                </v-list-item-content>
-              </header>
-                <div>
-                  {{item.message}}
-                </div>
-            </section>
-          </section>
+          <notifications-tag :notifications ="this.notifications"></notifications-tag>
         </v-col>
       </v-row>
+      <p>here{{this.notifications}}</p>
       <p>here{{this.info}}</p>
+      
     </v-container>
 </template>
 <script>
  // axiosを読み込む
   import axios from 'axios';
   import { mapGetters } from 'vuex';
+  import notificationsJs from '../../../mixIns/notifications';
   import HeaderTestFilter from '../../../filters/headerTestFilter'
 
 export default {
+  mixins: [ notificationsJs ],
   data: function () {
     return {
       message: "Log in",
@@ -175,7 +157,6 @@ export default {
         'web', 'shopping', 'videos', 'images', 'news',
       ],
       acitiveItems: [],
-      notifications: [],
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       info: null,
       testHeaderSize: 0,
@@ -204,16 +185,40 @@ export default {
           this.followLabel = 'follow'
         }
         
-        response.data.notifications.map(element => {
-          let item = {
-            image: 'http://localhost:3000/api/v1/user_photo/' + element.user_id,
-            user_id: element.user_id,
-            message: element.message,
-            nickname: element.nickname,
-            created_at: element.created_at
-          }
-          this.notifications.push(item)
-        })
+        this.setNotifications(response)
+
+        response.data.activeItems.map(element => {
+              
+              let item = {
+                id: element.id,
+                image: 'http://localhost:3000/api/v1/user_photo/' + element.user_id,
+                title: element.header_name,
+                category: element.test_type,
+                keyword: element.question_num,
+                dateTime: element.updated_at,
+              };
+              
+              this.acitiveItems.push(item)
+              })
+      })
+      .catch      
+
+    } else {
+      console.log('mounted index');
+      axios
+      .get('http://localhost:3000/api/v1/user_page/', {
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(response => {
+        this.info = response.data
+        this.image = 'http://localhost:3000/api/v1/user_photo/' + response.data.user.id
+        if (response.data.realationship) {
+          this.followLabel = 'unfollow'
+        } else {
+          this.followLabel = 'follow'
+        }
+        
+        this.setNotifications(response)
 
         response.data.activeItems.map(element => {
               
@@ -228,29 +233,10 @@ export default {
               
               this.acitiveItems.push(item)
               
-              
-              
               })
       })
       .catch      
-
-    } else {
-      console.log('mounted');
-      axios
-      .get('http://localhost:3000/api/v1/user_page/' , {
-        headers: { "Content-Type": "application/json" },
-          email: this.email,
-      })
-      .then(response => {
-        this.info = response.data
-        this.image = response.data.user.image
-        if (response.data.realationship) {
-          this.followLabel = 'unfollow'
-        } else {
-          this.followLabel = 'follow'
-        }
-      })
-      .catch      
+   
     }
   },
   computed: {
@@ -259,7 +245,6 @@ export default {
       'getUserName',
       'getEmail'
     ]),
-  
   },
   
   methods: {

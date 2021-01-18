@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_11_053522) do
+ActiveRecord::Schema.define(version: 2021_01_16_070659) do
 
   create_table "employees", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
@@ -94,6 +94,15 @@ ActiveRecord::Schema.define(version: 2021_01_11_053522) do
     t.index ["your_answer_option_id"], name: "index_test_results_on_your_answer_option_id"
   end
 
+  create_table "user_photos", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.binary "image", size: :medium
+    t.string "extension", default: "jpeg"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_photos_on_user_id"
+  end
+
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -113,12 +122,10 @@ ActiveRecord::Schema.define(version: 2021_01_11_053522) do
     t.string "last_sign_in_ip"
     t.string "name"
     t.string "nickname"
-    t.binary "image", size: :medium
     t.string "email"
     t.text "tokens"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "extention", default: "jpeg"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -136,4 +143,5 @@ ActiveRecord::Schema.define(version: 2021_01_11_053522) do
   add_foreign_key "test_results", "test_form_options", column: "answer_option_id"
   add_foreign_key "test_results", "test_form_options", column: "your_answer_option_id"
   add_foreign_key "test_results", "test_result_headers"
+  add_foreign_key "user_photos", "users"
 end

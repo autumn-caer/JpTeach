@@ -1,5 +1,6 @@
 import DatePicker from '../packs/components/shared/date_picker.vue';
 import Config from '../const/config'
+import SearchConditionArea from '../packs/components/shared/search_condition_area.vue';
 
 export default {
   data () {
@@ -130,6 +131,8 @@ export default {
    },
  },
     components: {
-      datePicker: DatePicker
+      datePicker: DatePicker,
+      searchConditionArea: SearchConditionArea
     }
+
 }

@@ -1,6 +1,5 @@
 <template>
       <div>
-        <v-container fluid>
         <search-condition-area 
           :testTypeList="this.testTypeList"
           :userIdList ="this.userIdList"
@@ -8,8 +7,17 @@
           :pageSize ="this.pageSize"
           @input="filterChange"
         ></search-condition-area>
+             <div class="text-center">
+          <v-pagination
+            v-model="page"
+            :length="length"
+            @input = "pageChange"
+            color = "brown"
+          ></v-pagination>
+        </div>
+        <v-container fluid>
         <v-row min-height="700" no-gutters>
-          <v-col cols="12" >
+          <v-col lg="7" md="7" sm="7" cols="12">
             <v-card 
               v-for="(item, index) in filterItems" :key="index" 
             　min-height="250"
@@ -23,7 +31,7 @@
                 
                 <v-card-actions>
                   <v-row>
-                  <v-col lg="1" md="1" sm="12" cols="12">
+                  <v-col lg="3" md="3" sm="12" cols="12">
                     <v-btn
                       color="orange"
                       text
@@ -32,7 +40,7 @@
                       Answer
                     </v-btn>
                   </v-col>
-                  <v-col lg="1" md="1" sm="12" cols="12">
+                  <v-col lg="3" md="3" sm="12" cols="12">
                   <v-btn
                     color="orange"
                     text
@@ -55,7 +63,11 @@
                   </v-row>
                 </v-card-actions>
               </v-card-text>
+              
             </v-card>
+          </v-col>
+          <v-col lg="4" md="4" sm="4" cols="12">
+            <p>right</p>
           </v-col>
           </v-row>
         </v-container>
@@ -75,7 +87,7 @@
 <script>
   // axiosを読み込む
   import axios from 'axios';
-  import SearchConditionArea from '../shared/search_condition_area.vue';
+  // import SearchConditionArea from '../shared/search_condition_area.vue';
   import HeaderTestFilter from '../../../filters/headerTestFilter'
   import searchCondition from '../../../mixIns/searchCondition';
   import Config from '../../../const/config';
@@ -123,9 +135,6 @@
         return;
       },
     },
-  
-    components: {
-      searchConditionArea: SearchConditionArea
-    }
+
   }
 </script>

@@ -1,8 +1,10 @@
 class Api::V1::ResultHeaderController < ApiController
+  # before_action :authenticate_api_user! # この行を追加！
   before_action :set_tesfForms, only: [:show]
 
   #検索区分を取得モジュール
   include SearchComboboxes
+  include Notification
 
   # ActiveRecordのレコードが見つからなければ404 not foundを応答する
   rescue_from ActiveRecord::RecordNotFound do |exception|
@@ -11,6 +13,8 @@ class Api::V1::ResultHeaderController < ApiController
 
   def index
     userId = 1;
+    
+  
     testFormHeaders = TestResultHeader.joins(:test_form_header) \
                                     .where(user_id: userId) \
                                     .select("test_form_headers.header_name,
@@ -42,6 +46,9 @@ class Api::V1::ResultHeaderController < ApiController
     rtnHash[:testTypeList] = testTypeList
     rtnHash[:userIdList] = userIdList
     rtnHash[:testFormIdList] = testFormIdList
+
+    notifications = getNotifications(userId)
+    rtnHash[:notifications] = notifications
 
     render json: rtnHash
   end

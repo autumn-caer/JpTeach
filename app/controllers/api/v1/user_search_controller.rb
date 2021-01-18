@@ -1,8 +1,13 @@
 class Api::V1::UserSearchController < ApiController
+    include Notification
 
     def index
-        users = User.select(:id,:name)
         rtnHash = {}
+        userId = 1
+        notifications = getNotifications(userId)
+        rtnHash[:notifications] = notifications
+
+        users = User.select(:id,:name)
         rtnHash[:users] =  users
         render json: rtnHash
     end

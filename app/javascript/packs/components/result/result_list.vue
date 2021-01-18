@@ -71,11 +71,8 @@
       </div>
     </v-col>
     <v-col cols="12" sm="12" md="6" lg="6">
-      <v-card 
-      　min-height="500"
-        class="ma-lg-4 ma-md-3 ma-sm-3 ma-3 pa-lg-4 pa-md-4 pa-sm-8 pa-8">
-          <v-card-title class="headline">test</v-card-title>
-        </v-card>
+        <v-card-title class="headline">test</v-card-title>
+        <notifications-tag :notifications ="this.notifications"></notifications-tag>
     </v-col>
     </v-row>
   </v-container>
@@ -84,13 +81,13 @@
   // axiosを読み込む
   import axios from 'axios';
   import NavBar from '../shared/navbar.vue';
-  import SearchConditionArea from '../shared/search_condition_area.vue';
   import HeaderTestFilter from '../../../filters/headerTestFilter'
   import searchResultCondition from '../../../mixIns/searchResultCondition';
   import Config from '../../../const/config';
+  import notificationsJs from '../../../mixIns/notifications';
   
   export default {
-    mixins: [ searchResultCondition ],
+    mixins: [ searchResultCondition, notificationsJs ],
     data() {
       return {
         inset: false,
@@ -115,7 +112,7 @@
                 response.data.testTypeList.map(element => this.testTypeList.push(element))
                 response.data.userIdList.map(element => this.userIdList.push(element))
                 response.data.testFormIdList.map(element => this.testFormIdList.push(element))
-
+                this.setNotifications(response)
                 for (var key in response.data.testFormHeaders) {
                   let data = {
                       testFormHeaders: response.data.testFormHeaders[key],
@@ -146,8 +143,8 @@
        },
     },
     components: {
-      navBar: NavBar,
-      searchConditionArea: SearchConditionArea
+      navBar: NavBar
+      // searchConditionArea: SearchConditionArea
     }
   }
 </script>

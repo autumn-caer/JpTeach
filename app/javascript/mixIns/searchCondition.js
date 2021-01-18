@@ -1,4 +1,5 @@
 import Config from '../const/config'
+import SearchConditionArea from '../packs/components/shared/search_condition_area.vue';
 
 export default {
   data () {
@@ -68,6 +69,10 @@ export default {
           default:
       }
   　}
+  },
+    
+  components: {
+    searchConditionArea: SearchConditionArea
   },
     
   computed: {

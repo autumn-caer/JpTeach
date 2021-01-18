@@ -51,7 +51,7 @@ class Api::V1::TestFormController < ApiController
     else
       testFormVersionOperation = TestFormVersionOperation.find(test_form_version_operation_id)
     end
-    byebug
+    
     tesfFormHeader = testFormVersionOperation.test_form_header.build(headerTestForm_param)
     testForms = []
     testFormOptions = []

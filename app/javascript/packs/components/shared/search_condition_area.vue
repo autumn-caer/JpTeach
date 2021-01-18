@@ -1,5 +1,5 @@
 <template>
-    <v-row no-gutters>
+    <v-row>
         <v-col cols="12" sm="4" md="4" lg="4">
             <v-combobox
             v-model="filterType"
