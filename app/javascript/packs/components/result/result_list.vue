@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <div>
   <search-condition-area 
     :testTypeList="this.testTypeList"
     :userIdList ="this.userIdList"
@@ -7,60 +7,111 @@
     :pageSize ="this.pageSize"
     @input="filterChange"
   ></search-condition-area>
+   <div class="text-center">
+          <v-pagination
+            v-model="page"
+            :length="length"
+            @input = "pageChange"
+            color = "brown"
+          ></v-pagination>
+    </div>
+   <v-container fluid>
   <v-row min-height="700">
     <v-col cols="12" sm="12" md="6" lg="6">
-      <v-card 
-        v-for="(item, index) in filterItems" :key="index" 
-      　min-height="250"
-        class="ma-lg-4 ma-md-3 ma-sm-3 ma-3 pa-lg-4 pa-md-4 pa-sm-8 pa-8">
-        <v-card-title class="headline" v-text="item.testFormHeaders.header_name">tes</v-card-title>
-        <v-card-subtitle class="pb-0" :text-content.prop="item.testFormHeaders.test_type | HeaderTestFilter"></v-card-subtitle>
-        <v-card-text class="text--primary">
-          <div v-text="'version: ' + item.testFormHeaders.version"></div>  
-          <div v-text="'questionNum: ' +item.testFormHeaders.question_num"></div>
-          <div v-text="'テスト受験回数: ' +item.testFormHeaders.count_all"></div>
-
-        <v-list-group>
-          <template v-slot:activator>
-            <v-list-item-title>Users</v-list-item-title>
-          </template>
-          <v-list-item v-for="(resultHeader, index) in item.resultHeaders"
-                        :key="index" link 
-                        @click="toResultPage(resultHeader.id)">
-              <v-list-item-title v-text="'try_time: ' +resultHeader.try_time">
-              </v-list-item-title>
-              <v-list-item-icon>
-                <v-icon >mdi-magnify</v-icon>
-              </v-list-item-icon>
+      <v-system-bar></v-system-bar>
+      <v-list>
+      <v-list-item
+            v-for="(item, i) in filterItems"
+            :key="i"
+            ripple
+            class="itemHover"
+          >
+            <v-list-item-content>
+              <v-chip
+                color="success"
+                outlined
+              >
+                <v-icon left>
+                  mdi-note-text-outline
+                </v-icon>
+                {{item.testFormHeaders.header_name}}
+              </v-chip>
+              <span>
+              <div class="text-uppercase font-weight-regular caption ml-3">
+                <span>
+                  <v-icon left color="success">
+                    mdi-music-accidental-sharp
+                  </v-icon>
+                </span>
+                <span :text-content.prop="item.testFormHeaders.test_type | HeaderTestFilter"></span>
+              </div>
+              <div class="text-uppercase font-weight-regular caption ml-3">
+                <span> 
+                   <v-icon left color="success">
+                    mdi-calendar-range
+                  </v-icon>
+                  作成日 : 
+              </span>
+                <span>{{item.testFormHeaders.created_at | moment("YYYY年MM月DD日") }}</span>
+              </div>
+              <div class="text-uppercase font-weight-regular caption ml-3">
+                <span>
+                  <v-icon left color="success">
+                    mdi-account-outline
+                  </v-icon>
+                  作成者 : 
+                </span>
+                <span v-text="item.testFormHeaders.user_id"></span>
+              </div>
+               <div class="text-uppercase font-weight-regular caption ml-3">
+                <span>
+                  <v-icon left color="success">
+                    mdi-check
+                  </v-icon>
+                  問題数 : 
+                </span>
+                <span v-text="item.testFormHeaders.question_num"></span>
+              </div>
+              <div class="text-uppercase font-weight-regular caption ml-3">
+                <span>
+                  <v-icon left color="success">
+                    mdi-check
+                  </v-icon>
+                  公開区分 : 
+                </span>
+                <span>{{item.testFormHeaders.open_type | OpenTypeFilter}}</span>
+              </div>
+              <div class="text-uppercase font-weight-regular caption ml-3">
+                <span>
+                  <v-icon left color="success">
+                    mdi-check
+                  </v-icon>
+                  テスト受験回数 : 
+                </span>
+                <span>{{item.testFormHeaders.count_all}}</span>
+              </div>
+                <v-list-group>
+                  <template v-slot:activator>
+                    <v-list-item-title>Users</v-list-item-title>
+                  </template>
+                  <v-list-item v-for="(resultHeader, index) in item.resultHeaders"
+                                :key="index" link 
+                                @click="toResultPage(resultHeader.id)">
+                      <v-list-item-title v-text="'try_time: ' +resultHeader.try_time">
+                      </v-list-item-title>
+                      <v-list-item-icon>
+                      <v-btn
+                        color="orange"
+                        text
+                        >
+                        Check
+                      </v-btn>
+                      </v-list-item-icon>
+                  </v-list-item>
+                </v-list-group>
+            </v-list-item-content>
           </v-list-item>
-        </v-list-group>
-          <v-card-actions>
-            <v-btn
-              color="orange"
-              text
-              @click="toAnswerPage(item.testFormHeaders.id)"
-            >
-              Answer
-            </v-btn>
-            <v-btn
-              color="orange"
-              text
-              @click="toEditPage(item.testFormHeaders.id)"
-            >
-              Edit
-            </v-btn>
-            <v-btn icon>
-              <v-icon>mdi-heart</v-icon>
-            </v-btn>
-            <v-btn icon>
-              <v-icon>mdi-bookmark</v-icon>
-            </v-btn>
-            <v-btn icon>
-              <v-icon>mdi-share-variant</v-icon>
-            </v-btn>
-          </v-card-actions>
-        </v-card-text>
-      </v-card>
+        </v-list>
       <div class="text-center">
           <v-pagination
             v-model="page"
@@ -75,16 +126,21 @@
         <notifications-tag :notifications ="this.notifications"></notifications-tag>
     </v-col>
     </v-row>
+    <p>{{this.userIdList}}</p>
+        <p>displayItems；{{this.displayItems}}</p>
   </v-container>
+  </div>
 </template>
 <script>
   // axiosを読み込む
   import axios from 'axios';
   import NavBar from '../shared/navbar.vue';
   import HeaderTestFilter from '../../../filters/headerTestFilter'
+  import OpenTypeFilter from '../../../filters/openTypeFilter'
   import searchResultCondition from '../../../mixIns/searchResultCondition';
   import Config from '../../../const/config';
   import notificationsJs from '../../../mixIns/notifications';
+  import { mapGetters } from 'vuex';
   
   export default {
     mixins: [ searchResultCondition, notificationsJs ],
@@ -100,6 +156,7 @@
     },
     filters: {
       HeaderTestFilter,
+      OpenTypeFilter
     },
      mounted: function(){
             console.log('testlist mounted');
@@ -143,8 +200,17 @@
        },
     },
     components: {
+      ...mapGetters([
+        'getUserId',
+        'getUserName',
+        'getEmail'
+      ]),
       navBar: NavBar
-      // searchConditionArea: SearchConditionArea
     }
   }
 </script>
+<style scoped>
+.itemHover:hover {
+	background-color:#f8f7f6; 	/*リンクにマウスが乗ったら背景色を変更する*/
+}
+</style>

@@ -7,6 +7,7 @@
             label="Combobox"
             outlined
             dense
+            background-color="white"
             @input ="filterChange"
             ></v-combobox>
         </v-col>
@@ -17,6 +18,7 @@
             label="Search"
             single-line
             hide-details
+            background-color="white"
             class ="py-0 px-3"
             @input="statusChange"
         ></v-text-field>
@@ -28,21 +30,25 @@
             outlined
             multiple
             dense
+            background-color="white"
             @change="statusChange"
             ></v-combobox>
         </v-col>
         <v-col cols="12" sm="8" md="8" lg="8" v-show="filterType == this.getUserIdName">
             <v-combobox
+            v-model="selecteditem"
             :items="userIdList"
             label="Combobox"
             outlined
             multiple
             dense
-            @change="statusChange"
+            background-color="white"
+            item-text="name" item-value="id" return-object
+            @change="userObjStatusChange"
             ></v-combobox>
         </v-col>
         <v-col cols="12" sm="4" md="4" lg="4" v-show="filterType == this.getCreatedAtName">
-        <v-text-field v-model="createdTime" class ="py-0 px-3" single-line>
+        <v-text-field v-model="createdTime" class ="py-0 px-3 white" single-line>
             <template v-slot:append-outer>
             <date-picker v-model="createdTime" @input="timeChange"/>
             </template>
@@ -55,6 +61,7 @@
             label="created_filter"
             outlined
             dense
+            background-color="white"
             @change="statusChange"
             ></v-combobox>
         </v-col>
@@ -64,6 +71,7 @@
             label="id_filter"
             outlined
             dense
+            background-color="white"
             @change="statusChange"
             ></v-combobox>
         </v-col>
@@ -78,6 +86,7 @@ export default {
 
   data () {
     return {
+      selecteditem: null,
       filterType: Config.HEADER_NAME.name,
       createdTime: this.$moment().format("YYYY-MM-DD"),
       createdTimeType: Config.SAME_DAY.name,
@@ -89,6 +98,13 @@ export default {
   methods: {
       statusChange(newValue){
           this.$emit('input', newValue, this.filterType, this.createdTime) 
+      },
+      userObjStatusChange(){
+          let rtnArr = []
+          this.selecteditem.forEach(element =>{
+             rtnArr.push(element.id)
+          });
+          this.$emit('input', rtnArr, this.filterType, this.createdTime) 
       },
       timeChange(newValue) {
           this.$emit('input', this.createdTimeType, this.filterType, newValue) 
@@ -119,3 +135,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.v-input__slot {
+    background-color:#FFFFFF;
+}
+</style>

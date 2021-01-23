@@ -15,21 +15,23 @@ class Api::V1::TestFormHeaderController < ApiController
   
     #自身のテストを全て取得取得する
     #follwerのテスト_open_type: フォロワーOnlyとpublicを取得する
-    testFormHeader = User.joins(:test_form_headers).where(test_form_headers: {user_id: 1}).select("test_form_headers.*")\
+    testFormHeader = User.joins(:test_form_headers).where(test_form_headers: {user_id: 1}).select("test_form_headers.*, users.name")\
                           .union(User.joins(:test_form_headers)\
                           .where(test_form_headers: {user_id: followerIdList, open_type: [CONSTANTS::OPENTYPE::PUBLIC,CONSTANTS::OPENTYPE::FOLLOWER_ONLY]})\
-                          .select("test_form_headers.*"))
+                          .select("test_form_headers.*, users.name"))
     
     testTypeList = getTestTypeList()
     testFormIdList     = getFormIdList()
     userIdList = getUserIdList(1)
     
-    userIdList << followerIdList
+    userList =[]
+    pushUserList(userList, userIdList)
+    pushUserList(userList, followerIdList)
 
     rtnHash = {}
     rtnHash[:testFormHeader] = testFormHeader
     rtnHash[:testTypeList] = testTypeList
-    rtnHash[:userIdList] = userIdList
+    rtnHash[:userIdList] = userList
     rtnHash[:testFormIdList] = testFormIdList
     render json: rtnHash
   end

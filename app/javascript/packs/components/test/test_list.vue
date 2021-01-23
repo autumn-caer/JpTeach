@@ -18,53 +18,114 @@
         <v-container fluid>
         <v-row min-height="700" no-gutters>
           <v-col lg="7" md="7" sm="7" cols="12">
-            <v-card 
-              v-for="(item, index) in filterItems" :key="index" 
-            　min-height="250"
-              class ="ma-lg-4 ma-md-3 ma-sm-3 ma-3 pa-lg-4 pa-md-4 pa-sm-8 pa-8">
-              <v-card-title class="headline" v-text="item.header_name"></v-card-title>
-              <v-card-subtitle class="pb-0" :text-content.prop="item.test_type | HeaderTestFilter"></v-card-subtitle>
-              <v-card-text class="text--primary">
-                <div v-text="item.id"></div>
-                <div v-text="item.name"></div>  
-                <div v-text="item.question_num"></div>
-                
-                <v-card-actions>
-                  <v-row>
-                  <v-col lg="3" md="3" sm="12" cols="12">
-                    <v-btn
+          <v-card
+            min-height="700"
+            class=""
+          > 
+          <v-system-bar></v-system-bar>
+          <v-list three-line>
+          <v-list-item
+            v-for="(item, i) in filterItems"
+            :key="i"
+            ripple
+            class="itemHover"
+          >
+            <v-list-item-content>
+              <v-chip
+                color="success"
+                outlined
+              >
+                <v-icon left>
+                  mdi-note-text-outline
+                </v-icon>
+                {{item.header_name}}
+              </v-chip>
+              <span>
+              <div class="text-uppercase font-weight-regular caption ml-3">
+                <span>
+                  <v-icon left color="success">
+                    mdi-music-accidental-sharp
+                  </v-icon>
+                  ID : 
+                </span>
+                <span v-text="item.id"></span>
+              </div>
+              <div class="text-uppercase font-weight-regular caption ml-3">
+                <span>
+                  <v-icon left color="success">
+                    mdi-cube-outline
+                  </v-icon>
+                </span>
+                <span :text-content.prop="item.test_type | HeaderTestFilter"></span>
+              </div>
+              <div class="text-uppercase font-weight-regular caption ml-3">
+                <span> 
+                   <v-icon left color="success">
+                    mdi-calendar-range
+                  </v-icon>
+                  作成日 : 
+              </span>
+                <span>{{item.created_at | moment("YYYY年MM月DD日") }}</span>
+              </div>
+              <div class="text-uppercase font-weight-regular caption ml-3">
+                <span>
+                  <v-icon left color="success">
+                    mdi-account-outline
+                  </v-icon>
+                  作成者 : 
+                </span>
+                <span v-text="item.name"></span>
+              </div>
+               <div class="text-uppercase font-weight-regular caption ml-3">
+                <span>
+                  <v-icon left color="success">
+                    mdi-check
+                  </v-icon>
+                  問題数 : 
+                </span>
+                <span v-text="item.question_num"></span>
+              </div>
+              <div class="text-uppercase font-weight-regular caption ml-3">
+                <span>
+                  <v-icon left color="success">
+                    mdi-check
+                  </v-icon>
+                  公開区分 : 
+                </span>
+                <span>{{item.open_type | OpenTypeFilter}}</span>
+              </div>
+              <div class="text-uppercase font-weight-regular caption ml-3">
+                <span>
+                  <v-icon left color="success">
+                    mdi-check
+                  </v-icon>
+                  テスト_version : 
+                </span>
+                <span v-text="item.version"></span>
+              </div>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
                       color="orange"
                       text
+                      class="buttonHover"
                       @click="toAnswerPage(item.id)"
-                    >
+                      >
                       Answer
-                    </v-btn>
-                  </v-col>
-                  <v-col lg="3" md="3" sm="12" cols="12">
-                  <v-btn
-                    color="orange"
-                    text
-                    @click="toEditPage(item.id)"
-                  >
-                    Edit
-                  </v-btn>
-                  </v-col>
-                  <v-col lg="4" md="4" sm="12" cols="12">
-                  <v-btn icon>
-                    <v-icon>mdi-heart</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>mdi-bookmark</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>mdi-share-variant</v-icon>
-                  </v-btn>
-                  </v-col>
-                  </v-row>
-                </v-card-actions>
-              </v-card-text>
-              
-            </v-card>
+                     </v-btn>
+                     <v-btn
+                       color="orange"
+                       text
+                       class="buttonHover"
+                       @click="toEditPage(item.id)"
+                      >
+                      Edit
+                     </v-btn>
+                    </v-card-actions>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        </v-card>
           </v-col>
           <v-col lg="4" md="4" sm="4" cols="12">
             <p>right</p>
@@ -79,7 +140,7 @@
             color = "brown"
           ></v-pagination>
         </div>
-        <p>{{this.info}}</p>
+        <p>{{this.userIdList}}</p>
         <p>検索；  {{this.search}}</p>
         <p>displayItems；{{this.displayItems}}</p>
       </div>
@@ -87,8 +148,9 @@
 <script>
   // axiosを読み込む
   import axios from 'axios';
-  // import SearchConditionArea from '../shared/search_condition_area.vue';
   import HeaderTestFilter from '../../../filters/headerTestFilter'
+  import OpenTypeFilter from '../../../filters/openTypeFilter'
+  import { mapGetters } from 'vuex';
   import searchCondition from '../../../mixIns/searchCondition';
   import Config from '../../../const/config';
   
@@ -104,6 +166,7 @@
     },
     filters: {
       HeaderTestFilter,
+      OpenTypeFilter
     },
      mounted: function(){
             axios
@@ -133,8 +196,23 @@
       toAnswerPage (id) {
            this.$router.push('/test_answer/' + id); 
         return;
-      },
+      }
     },
-
+    computed: {
+      ...mapGetters([
+        'getUserId',
+        'getUserName',
+        'getEmail'
+      ]),
+    },
   }
 </script>
+<style scoped>
+.itemHover:hover {
+	background-color:#f8f7f6; 	/*リンクにマウスが乗ったら背景色を変更する*/
+}
+.buttonHover:hover {
+  background-color:#795548; 	/*リンクにマウスが乗ったら背景色を変更する*/
+  color:#FFFFFF !important;
+}
+</style>

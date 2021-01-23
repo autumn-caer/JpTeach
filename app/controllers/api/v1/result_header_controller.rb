@@ -24,6 +24,8 @@ class Api::V1::ResultHeaderController < ApiController
                                              test_form_headers.created_at,
                                              test_result_headers.test_form_header_id,
                                              test_form_headers.test_form_version_operation_id,
+                                             test_form_headers.open_type,
+                                             test_form_headers.user_id,
                                              count(test_result_headers.id) as count_all")
                                     .group(:test_form_header_id \
                                            ,:test_form_version_operation_id)
@@ -38,13 +40,16 @@ class Api::V1::ResultHeaderController < ApiController
     testFormIdList     = getFormIdList()
     userIdList = getUserIdList(userId)
     followerIdList = getFollwerIdList(userId)
-    userIdList << followerIdList
+
+    userList =[]
+    pushUserList(userList, userIdList)
+    pushUserList(userList, followerIdList)
 
     rtnHash = {}
     rtnHash[:testFormHeaders] = testFormHeaders
     rtnHash[:resultHeaderList] = resultHeaderList
     rtnHash[:testTypeList] = testTypeList
-    rtnHash[:userIdList] = userIdList
+    rtnHash[:userIdList] = userList
     rtnHash[:testFormIdList] = testFormIdList
 
     notifications = getNotifications(userId)
